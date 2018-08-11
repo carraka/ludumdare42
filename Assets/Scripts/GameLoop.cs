@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 
 public class GameLoop : MonoBehaviour {
 
+    private DataBucket db;
+    private Document document;
+
     private Text textBox;
     private float fontWidth;
     private float fontHeight;
@@ -21,10 +24,22 @@ public class GameLoop : MonoBehaviour {
     EventSystem m_EventSystem;
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
-        textBox = GetComponentInChildren<Text>();
         cursor = GetComponentInChildren<CursorController>();
+        db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
+        document = GetComponentInChildren<Document>();
+        textBox = document.GetComponent<Text>();
+
+        //Fetch the Raycaster from the GameObject (the Canvas)
+        m_Raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+        //Fetch the Event System from the Scene
+        m_EventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+    }
+
+    private void Start()
+    {
+        document.SetUpDocument(db.level);
 
         GUIStyle style = new GUIStyle();
 
@@ -40,16 +55,12 @@ public class GameLoop : MonoBehaviour {
         cursor.MoveCursor(cursorLocation);
 
         minX = Camera.main.pixelWidth * 0.2f;
-        maxY = (Camera.main.pixelWidth * 0.75f) * 0.8f - (Camera.main.pixelWidth * 0.75f - Camera.main.pixelHeight)/2;
+        maxY = (Camera.main.pixelWidth * 0.75f) * 0.8f - (Camera.main.pixelWidth * 0.75f - Camera.main.pixelHeight) / 2;
 
-        //Fetch the Raycaster from the GameObject (the Canvas)
-        m_Raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
-        //Fetch the Event System from the Scene
-        m_EventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
 
         if (Input.GetMouseButtonDown(0))

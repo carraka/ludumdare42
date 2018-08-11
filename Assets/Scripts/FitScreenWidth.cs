@@ -11,8 +11,5 @@ public class FitScreenWidth : MonoBehaviour {
         float scale = Camera.main.pixelWidth / RT.sizeDelta.x;
 
         RT.sizeDelta *= scale;
-
-        Debug.Log(RT.sizeDelta);
-
     }
 }

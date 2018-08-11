@@ -14,7 +14,7 @@ public class CursorController : MonoBehaviour {
     float charWidth, charHeight;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
         StartTime = Time.time;
         cursorBG = GetComponent<Image>();
@@ -32,7 +32,6 @@ public class CursorController : MonoBehaviour {
 
     public void MoveCursor(Vector2Int location)
     {
-        Debug.Log(location);
         GetComponent<RectTransform>().anchoredPosition = new Vector2(location.x * charWidth, location.y * -charHeight);
     }
 	// Update is called once per frame

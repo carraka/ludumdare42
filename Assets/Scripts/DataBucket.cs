@@ -7,6 +7,7 @@ public class DataBucket : MonoBehaviour {
     private static bool Protected = false;
 
     public int level;
+    public int levelsCleared;
 
 	// Use this for initialization
 	void Start ()

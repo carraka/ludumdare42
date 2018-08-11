@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddefc11c1eb744d4f9fbbc5496556a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
+  level: 1
 --- !u!4 &229272308
 Transform:
   m_ObjectHideFlags: 0
@@ -684,11 +684,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Guinevere and Lancelet live some bit aways from the kingdom of\u2026 Arthur!
-    They have a daughter and a pair of twins. But one day Lancelet gets called for
-    by none other than Arthur himself to help him fight against the Gallic Empire.
-    Reluctantly, Guinevere lets him go with a parting gift of locks of her hair from
-    her armpits."
+  m_Text: Game text
 --- !u!222 &1914006018
 CanvasRenderer:
   m_ObjectHideFlags: 0

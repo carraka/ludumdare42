@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 45bbb1e97940f844885fd49ef5006410
+=======
+guid: 161191396eaa74643ad6d9e8b6298e1e
+>>>>>>> Added titles, credits, and level select scenes. Started work on animation for level select.
 AudioImporter:
   externalObjects: {}
   serializedVersion: 6

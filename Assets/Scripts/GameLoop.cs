@@ -23,6 +23,8 @@ public class GameLoop : MonoBehaviour {
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
 
+    private int errorCount;
+
     // Use this for initialization
     void Awake ()
     {
@@ -48,15 +50,29 @@ public class GameLoop : MonoBehaviour {
 
         Vector2 fontSize = style.CalcSize(new GUIContent("a"));
         fontWidth = fontSize.x;
-        fontHeight = fontSize.y + 1;
+        fontHeight = fontSize.y;
 
         cursor.SetSize(textBox.fontSize, fontWidth, fontHeight);
         cursorLocation = Vector2Int.zero;
         cursor.MoveCursor(cursorLocation);
 
-        minX = Camera.main.pixelWidth * 0.2f;
-        maxY = (Camera.main.pixelWidth * 0.75f) * 0.8f - (Camera.main.pixelWidth * 0.75f - Camera.main.pixelHeight) / 2;
+        RectTransform monitorRect = GetComponent<RectTransform>();
+        RectTransform documentRect = GameObject.Find("Document").GetComponent<RectTransform>();
 
+        minX = Camera.main.pixelWidth * monitorRect.anchorMin.x +
+            (Camera.main.pixelWidth * (monitorRect.anchorMax.x - monitorRect.anchorMin.x)) * documentRect.anchorMin.x;
+
+        maxY = Camera.main.pixelWidth * 0.75f * monitorRect.anchorMax.y -
+            (Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y)) * (1 - documentRect.anchorMax.y) -
+            (Camera.main.pixelWidth * 0.75f - Camera.main.pixelHeight) / 2;
+
+
+        errorCount = 0;
+
+        if (db.levelDifficulty == Difficulty.easy)
+        {
+            cursor.GetComponent<Image>().enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -87,7 +103,18 @@ public class GameLoop : MonoBehaviour {
             int y = Mathf.FloorToInt((maxY - Input.mousePosition.y) / fontHeight);
 
             cursorLocation = new Vector2Int(x, y);
-            cursor.MoveCursor(cursorLocation);
+            document.ClickAt(cursorLocation);
         }
-	}
+
+        if (db.levelDifficulty != Difficulty.easy)
+        {
+            bool errors = cursor.CheckKeys();
+            if (db.levelDifficulty == Difficulty.hard && errors)
+            {
+                errorCount++;
+                //Debug.Log("Error Count: " + errorCount);
+            }
+        }
+
+    }
 }

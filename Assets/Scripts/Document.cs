@@ -6,24 +6,51 @@ using System.IO;
 
 public class Document : MonoBehaviour {
 
-    List<string> lines;
-    List<Space> spaces;
+    public List<int> lineStart;
+    public List<Space> spaces;
+
+    public Text documentText { get;  private set; }
+    private DataBucket db;
 
     float width;
     float height;
 
+    private void Awake()
+    {
+        documentText = GetComponent<Text>();
+    }
+
+    private void Start()
+    {
+        db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
+    }
     public bool SetUpDocument(int level)
     {
+
+        
         string text = ParseDocument(level);
-        Font font = GetComponent<Text>().font;
+        Font font = documentText.font;
 
         if (text == "")
             return false;
 
-        width = GetComponent<RectTransform>().rect.width;
-        height = GetComponent<RectTransform>().rect.height;
+        //width = GetComponent<RectTransform>().rect.width;
+        //height = GetComponent<RectTransform>().rect.height;
 
-        Debug.Log("Document size: " + width + " x " + height);
+        RectTransform monitorRect = GameObject.Find("Monitor").GetComponent<RectTransform>();
+        RectTransform documentRect = GetComponent<RectTransform>();
+
+
+        width = Camera.main.pixelWidth * 
+            (monitorRect.anchorMax.x - monitorRect.anchorMin.x) * 
+            (documentRect.anchorMax.x - documentRect.anchorMin.x);
+
+        height = Camera.main.pixelWidth * 0.75f *
+            (monitorRect.anchorMax.y - monitorRect.anchorMin.y) *
+            (documentRect.anchorMax.y - documentRect.anchorMin.y);
+
+
+        //Debug.Log("Document size: " + width + " x " + height);
 
         bool working = true;
         int fontSize = 60;
@@ -37,7 +64,7 @@ public class Document : MonoBehaviour {
 
             Vector2 charSize = style.CalcSize(new GUIContent("a"));
             float charWidth = charSize.x;
-            float charHeight = charSize.y + 1;
+            float charHeight = charSize.y;
 
             int maxWidth = Mathf.FloorToInt(width / charWidth);
             int maxHeight = Mathf.FloorToInt(height / charHeight);
@@ -50,6 +77,9 @@ public class Document : MonoBehaviour {
             int y = 0;
 
             spaces = new List<Space>();
+            lineStart = new List<int>();
+
+            lineStart.Add(0);
 
             for (int pos = 0;pos < testText.Length;pos++)
             {
@@ -65,6 +95,7 @@ public class Document : MonoBehaviour {
                     x = -1;
                     y++;
                     lastWordBreak = pos;
+                    lineStart.Add(pos + 1);
                 }
                 else if(testText[pos] == ' ')
                 {
@@ -76,9 +107,11 @@ public class Document : MonoBehaviour {
                 if (x >= maxWidth)
                 {
                     testText = testText.Substring(0, lastWordBreak) + "\n" + testText.Substring(lastWordBreak + 1);
-                    lastSpace--;
                     spaces.Remove(spaces[lastSpace]);
+                    lastSpace--;
+
                     x = pos - lastWordBreak - 1;
+                    lineStart.Add(lastWordBreak + 1);
                     y++;
                 }
 
@@ -99,24 +132,28 @@ public class Document : MonoBehaviour {
                 if (pos == testText.Length - 1)
                 {
                     working = false;
-                    Debug.Log("Parse Successful");
-
-                    foreach (Space space in spaces)
-                    {
-                        Debug.Log("Space found at " + space.location);
-                    }
+                    //Debug.Log("Parse Successful");
                 }
+
+                x++;
 
             }
 
-            GetComponent<Text>().text = testText;
+            documentText.text = testText;
+            documentText.fontSize = fontSize;
         }
+
+        for(int x = 0; x< spaces.Count;x++)
+        {
+            spaces[x] = FillSpace(spaces[x]);
+        }
+
 
         return true;
 
     }
 
-    private string ParseDocument(int level)
+    public string ParseDocument(int level)
     {
         StreamReader reader = new StreamReader("Assets/Resources/epci.txt");
         string text = reader.ReadToEnd();
@@ -135,6 +172,76 @@ public class Document : MonoBehaviour {
 
         int tagLength = ("[" + level + "]").Length;
         return text.Substring(startOfText + tagLength, endOfText - startOfText - tagLength - 2);
+    }
+
+    public Space FillSpace(Space space)
+    {
+        char letter = (char)(Random.Range((int)'a',(int)'z'));
+
+        return FillSpace(space, letter);
+    }
+
+    public Space ClearSpace(Space space)
+    {
+        return FillSpace(space, ' ');
+    }
+
+    private Space FillSpace(Space space, char letter)
+    {
+        int pos = VectorToPos(space.location);
+        space.currentChar = letter;
+
+        string text = documentText.text;
+
+        documentText.text = text.Substring(0, pos) + letter + text.Substring(pos + 1);
+
+        return space;
+    }
+
+    private int VectorToPos(Vector2Int location)
+    {
+        return lineStart[location.y] + location.x;
+    }
+
+    public void ClickAt(Vector2Int location)
+    {
+        if (db.levelDifficulty == Difficulty.easy)
+        {
+            foreach(Space space in spaces)
+            {
+                if (space.location == location)
+                    ClearSpace(space);
+            }
+        }
+        else
+        {
+            location = ClampToText(location);
+            GetComponentInChildren<CursorController>().MoveCursor(location);
+        }
+    }
+    public Vector2Int ClampToText(Vector2Int location)
+    {
+        location.y = Mathf.Clamp(location.y, 0, lineStart.Count - 1);
+        if (location.x < 0)
+            location.x = 0;
+        
+        if (location.y == lineStart.Count-1)
+        {
+            if (lineStart[location.y] + location.x >= documentText.text.Length)
+                location.x = documentText.text.Length - lineStart[location.y] - 1;
+        }
+        else
+        {
+            if (lineStart[location.y] + location.x >= lineStart[location.y + 1] - 1)
+                location.x = lineStart[location.y + 1] - lineStart[location.y] - 2;
+        }
+
+        return location;
+    }
+
+    public char CharAt(Vector2Int location)
+    {
+        return documentText.text[VectorToPos(location)];
     }
 }
 

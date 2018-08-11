@@ -8,6 +8,7 @@ public class DataBucket : MonoBehaviour {
 
     public int level;
     public int levelsCleared;
+    public Difficulty levelDifficulty;
 
 	// Use this for initialization
 	void Start ()
@@ -21,3 +22,5 @@ public class DataBucket : MonoBehaviour {
             DestroyImmediate(this);
 	}
 }
+
+public enum Difficulty { easy, medium, hard};

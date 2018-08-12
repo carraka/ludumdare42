@@ -23,12 +23,12 @@ public class EndingManager : MonoBehaviour {
         {
             case "fail":
                 audio.PlayOneShot((AudioClip)Resources.Load("Audio/Music/ld41_ending_chicken"));
-                illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/chicken_ending");
+                illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/badend_clean");
                 endingText.text = "You ran out of spaces! The glitches have invaded your manuscript, delaying the publication date by weeks! Not that you were around to see it. The bestselling machine will churn on without you.";
                 break;
 
             case "succeed":
-                illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/lover_ending");
+                illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/goodend_clean");
                 audio.PlayOneShot((AudioClip)Resources.Load("Audio/Music/ld41_ending_romantic"));
                 endingText.text = "You saved the spaces! The book you edited catapults to the top of the bestseller list, and your job is secure. If only you had had time to do a proper edit. Not that it would have helped the story much ...";
                 break;

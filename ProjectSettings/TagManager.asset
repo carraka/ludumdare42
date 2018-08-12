@@ -8,6 +8,7 @@ TagManager:
   - Document
   - Glitch
   - Button
+  - Monitor
   layers:
   - Default
   - TransparentFX

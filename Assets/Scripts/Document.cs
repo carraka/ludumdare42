@@ -50,36 +50,62 @@ public class Document : MonoBehaviour {
             (documentRect.anchorMax.y - documentRect.anchorMin.y);
 
 
-        //Debug.Log("Document size: " + width + " x " + height);
+        Debug.Log("Document size: " + width + " x " + height);
 
         bool working = true;
         int fontSize = 60;
 
         while (working)
         {
-            GUIStyle style = new GUIStyle();
+            float charWidth;
+            float charHeight;
 
-            style.font = font;
-            style.fontSize = fontSize;
+            int maxWidth;
+            int maxHeight;
+            
+            do
+            {
 
-            Vector2 charSize = style.CalcSize(new GUIContent("a"));
-            float charWidth = charSize.x;
-            float charHeight = charSize.y;
+                GUIStyle style = new GUIStyle();
 
-            int maxWidth = Mathf.FloorToInt(width / charWidth);
-            int maxHeight = Mathf.FloorToInt(height / charHeight);
+                style.font = font;
+                style.fontSize = fontSize;
 
+                Vector2 charSize = style.CalcSize(new GUIContent("a"));
+                charWidth = charSize.x;
+                charHeight = charSize.y;
+
+                maxWidth = Mathf.FloorToInt(width / charWidth);
+                maxHeight = Mathf.FloorToInt(height / charHeight);
+
+                Debug.Log("Font Size: " + fontSize + ", Char Size: " + charWidth + " x " + charHeight + ", Max Width: " + maxWidth + ", Max Height: " + maxHeight);
+
+
+                if (maxWidth < 20)
+                {
+                    if (fontSize == 10)
+                    {
+                        Debug.Log("Too much text");
+                        return false;
+                    }
+                    else
+                    {
+                        fontSize -= 10;
+                    }
+                }
+
+            } while (maxWidth < 20);
             string testText = text;
 
-            int lastSpace = -1;
-            int lastWordBreak = -1;
-            int x = 0;
-            int y = 0;
+                int lastSpace = -1;
+                int lastWordBreak = -1;
+                int x = 0;
+                int y = 0;
 
-            spaces = new List<Space>();
-            lineStart = new List<int>();
+                spaces = new List<Space>();
+                lineStart = new List<int>();
 
-            lineStart.Add(0);
+                lineStart.Add(0);
 
             for (int pos = 0;pos < testText.Length;pos++)
             {
@@ -106,6 +132,7 @@ public class Document : MonoBehaviour {
 
                 if (x >= maxWidth)
                 {
+
                     testText = testText.Substring(0, lastWordBreak) + "\n" + testText.Substring(lastWordBreak + 1);
                     spaces.Remove(spaces[lastSpace]);
                     lastSpace--;

@@ -34,7 +34,7 @@ public class GameLoop : MonoBehaviour {
         textBox = document.GetComponent<Text>();
 
         //Fetch the Raycaster from the GameObject (the Canvas)
-        m_Raycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+        m_Raycaster = GameObject.Find("BGCanvas").GetComponent<GraphicRaycaster>();
         //Fetch the Event System from the Scene
         m_EventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
     }
@@ -81,7 +81,7 @@ public class GameLoop : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-
+            
             //Set up the new Pointer Event
             m_PointerEventData = new PointerEventData(m_EventSystem);
             //Set the Pointer Event Position to that of the mouse position
@@ -94,16 +94,35 @@ public class GameLoop : MonoBehaviour {
             m_Raycaster.Raycast(m_PointerEventData, results);
 
             //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
-            foreach (RaycastResult result in results)
+
+            bool monitorHit = false;
+            int glitchHit = -1;
+
+            for (int pos = 0; pos < results.Count; pos++)
             {
-                Debug.Log("Hit " + result.gameObject.name);
+                if(results[pos].gameObject.tag == "Monitor")
+                    monitorHit = true;
+                if (results[pos].gameObject.tag == "Glitch")
+                    glitchHit = pos;
+
+                Debug.Log(results[pos].gameObject.name + " hit!");
             }
 
-            int x = Mathf.FloorToInt((Input.mousePosition.x - minX) / fontWidth);
-            int y = Mathf.FloorToInt((maxY - Input.mousePosition.y) / fontHeight);
+            if (monitorHit)
+            {
+                if (glitchHit >= 0)
+                {
+                    results[glitchHit].gameObject.GetComponent<Glitch>().hit();
+                }
+                else
+                {
+                    int x = Mathf.FloorToInt((Input.mousePosition.x - minX) / fontWidth);
+                    int y = Mathf.FloorToInt((maxY - Input.mousePosition.y) / fontHeight);
 
-            cursorLocation = new Vector2Int(x, y);
-            document.ClickAt(cursorLocation);
+                    cursorLocation = new Vector2Int(x, y);
+                    document.ClickAt(cursorLocation);
+                }
+            }
         }
 
         if (db.levelDifficulty != Difficulty.easy)

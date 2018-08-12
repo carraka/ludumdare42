@@ -64,7 +64,8 @@ public class load_game : MonoBehaviour {
         //stop in-game music
 
 
-        if (SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().name == "ending") ;
+        if (SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().name == "ending")
+            return;
 			//play menu music
 		
 	}

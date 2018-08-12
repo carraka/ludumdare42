@@ -8,7 +8,7 @@ public class LevelSelectManager : MonoBehaviour {
     private DataBucket databucket;
     private load_game load_game;
     private Document document;
-    private Text currText, nextText, prevText;
+    private Text currText, nextText, prevText, prevButtonText, nextButtonText;
 
     public int maxLevel, mediumFirstLevel, hardFirstLevel, currentLevelNumber;
 
@@ -34,6 +34,9 @@ public class LevelSelectManager : MonoBehaviour {
         nextLockImage = GameObject.Find("nextLock").GetComponent<Image>();
         prevButtonImage = GameObject.Find("prevButton").GetComponent<Image>();
         nextButtonImage = GameObject.Find("nextButton").GetComponent<Image>();
+        prevButtonText = GameObject.Find("prevButtonText").GetComponent<Text>();
+        nextButtonText = GameObject.Find("nextButtonText").GetComponent<Text>();
+
 
 
         prevButton = GameObject.Find("prevButton").GetComponent<Button>();
@@ -83,9 +86,10 @@ public class LevelSelectManager : MonoBehaviour {
         //currAnim.SetTrigger("turnToPrevPage");
         //nextAnim.SetTrigger("turnToPrevPage");
         //prevAnim.SetTrigger("turnToPrevPage");
-
+        Debug.Log("animating previous page");
         currentLevelNumber--;
         ResetVisuals();
+        Debug.Log("animating previous page");
 
     }
 
@@ -162,21 +166,26 @@ public class LevelSelectManager : MonoBehaviour {
             prevPageImage.enabled = false;
             prevButtonImage.enabled = false;
             prevButton.enabled = false;
+            prevButtonText.enabled = false;
         }
         else if (currentLevelNumber == maxLevel)
         {
             nextPageImage.enabled = false;
             nextButtonImage.enabled = false;
             nextButton.enabled = false;
+            nextButtonText.enabled = false;
         }
         else
         {
             prevPageImage.enabled = true;
             prevButtonImage.enabled = true;
             prevButton.enabled = true;
+            prevButtonText.enabled = true;
+
             nextPageImage.enabled = true;
             nextButtonImage.enabled = true;
             nextButton.enabled = true;
+            nextButtonText.enabled = true;
         }
 
         if (currentLevelNumber == databucket.levelsCleared)

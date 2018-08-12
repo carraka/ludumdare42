@@ -10,7 +10,8 @@ public class DataBucket : MonoBehaviour {
     public int levelsCleared;
     public Difficulty levelDifficulty;
 
-	// Use this for initialization
+    public int currLevel;
+
 	void Start ()
     {
         if (Protected == false)

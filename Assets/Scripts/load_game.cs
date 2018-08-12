@@ -33,21 +33,21 @@ public class load_game : MonoBehaviour {
 	
 	}
 
-	public void load_level() {
+	public void LoadLevel() {
 		if (SceneManager.GetActiveScene().name == "title")
 		{
-			SceneManager.LoadScene ("tutorial");
+			SceneManager.LoadScene ("levelselect");
 		}
 		else
 		{
 			//buttonSound.Play ();
-			SceneManager.LoadScene("Level 1");
+			SceneManager.LoadScene("levelselect");
 			GameObject.Find ("mainmenu_loop").GetComponent<AudioSource> ().Stop ();
 		}
 
 		
 	}
-	public void load_credits() {
+	public void LoadCredits() {
 		//buttonSound.Play ();
 		SceneManager.LoadScene("credits");
 
@@ -57,7 +57,7 @@ public class load_game : MonoBehaviour {
         }
 	}
 
-	public void load_title() {
+	public void LoadTitle() {
 		
 		//buttonSound.Play ();
 		SceneManager.LoadScene("title");
@@ -69,9 +69,9 @@ public class load_game : MonoBehaviour {
 		
 	}
 
-    public void load_manuscript()
+    public void RestartLevel()
     {
-        SceneManager.LoadScene("manuscript");
+        //restart the most recent level according to DataBucket
     }
 
 	/*public void Instructions(){

@@ -52,9 +52,9 @@ public class LevelSelectManager : MonoBehaviour {
     void Start () {
         currentLevelNumber = 1;
 
-        maxLevel = 15;
-        mediumFirstLevel = 5;
-        hardFirstLevel = 10;
+        maxLevel = 23;
+        mediumFirstLevel = 8;
+        hardFirstLevel = 16;
 
         ResetVisuals();
 
@@ -191,10 +191,12 @@ public class LevelSelectManager : MonoBehaviour {
         if (currentLevelNumber == databucket.levelsCleared)
         {
             nextLockImage.enabled = true;
+            nextButton.enabled = false;
         }
         else
         {
             nextLockImage.enabled = false;
+            nextButton.enabled = true;
         }
 
         if (databucket.levelsCleared < mediumFirstLevel)

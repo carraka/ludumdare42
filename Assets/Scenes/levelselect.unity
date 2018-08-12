@@ -320,7 +320,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 65336955}
-        m_MethodName: load_title
+        m_MethodName: LoadTitle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -790,7 +790,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 65336955}
-        m_MethodName: load_level
+        m_MethodName: LoadTitle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1592,6 +1592,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5af0f1f8347b9048a17d271ec499155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 0
+  mediumFirstLevel: 0
+  hardFirstLevel: 0
+  prevPageImage: {fileID: 0}
+  nextPageImage: {fileID: 0}
+  mediumLockImage: {fileID: 0}
+  hardLockImage: {fileID: 0}
+  nextLockImage: {fileID: 0}
+  prevButton: {fileID: 0}
+  nextButton: {fileID: 0}
 --- !u!4 &1409330755
 Transform:
   m_ObjectHideFlags: 0

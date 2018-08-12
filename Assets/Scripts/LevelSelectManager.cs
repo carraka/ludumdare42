@@ -9,7 +9,12 @@ public class LevelSelectManager : MonoBehaviour {
     private load_game load_game;
     private Text currText, nextText, prevText;
 
-    private Animator currAnim, prevAnim, nextAnim;
+    public int maxLevel, mediumFirstLevel, hardFirstLevel;
+
+    public Image prevPageImage, nextPageImage, mediumLockImage, hardLockImage, nextLockImage;
+    public Button prevButton, nextButton;
+
+    //private Animator currAnim, prevAnim, nextAnim;
 
     private void Awake()
     {
@@ -19,15 +24,19 @@ public class LevelSelectManager : MonoBehaviour {
         prevText = GameObject.Find("prevPageText").GetComponent<Text>();
         load_game = GameObject.Find("LoadLevelManager").GetComponent<load_game>();
 
-        currAnim = GameObject.Find("currPage").GetComponent<Animator>();
-        nextAnim = GameObject.Find("nextPage").GetComponent<Animator>();
-        prevAnim = GameObject.Find("prevPage").GetComponent<Animator>();
+        //currAnim = GameObject.Find("currPage").GetComponent<Animator>();
+        //nextAnim = GameObject.Find("nextPage").GetComponent<Animator>();
+        //prevAnim = GameObject.Find("prevPage").GetComponent<Animator>();
 
 
     }
     // Use this for initialization
     void Start () {
-        AnimNextPage();
+
+        maxLevel = 15;
+        mediumFirstLevel = 5;
+        hardFirstLevel = 10;
+        //AnimNextPage();
         //for (int i = 0; i < databucket.levelsCleared; i++)
         //{
         //    AnimNextPage();
@@ -41,24 +50,43 @@ public class LevelSelectManager : MonoBehaviour {
 
     public void AnimNextPage()
     {
-        currAnim.SetTrigger("turnToNextPage");
-        nextAnim.SetTrigger("turnToNextPage");
-        prevAnim.SetTrigger("turnToNextPage");
+        //currAnim.SetTrigger("turnToNextPage");
+        //nextAnim.SetTrigger("turnToNextPage");
+        //prevAnim.SetTrigger("turnToNextPage");
         load_game.currPage++;
+        ResetVisuals();
           
     }
 
     public void AnimPrevPage()
     {
-        currAnim.SetTrigger("turnToPrevPage");
-        nextAnim.SetTrigger("turnToPrevPage");
-        prevAnim.SetTrigger("turnToPrevPage");
+        //currAnim.SetTrigger("turnToPrevPage");
+        //nextAnim.SetTrigger("turnToPrevPage");
+        //prevAnim.SetTrigger("turnToPrevPage");
 
         load_game.currPage--;
+        ResetVisuals();
 
     }
 
-    public void ResetPagePositions()
+    private void ResetVisuals()
+    {
+        ResetText();
+        ResetPages();
+        ResetButtons();
+    }
+
+    private void ResetText()
+    {
+
+    }
+
+    private void ResetPages()
+    {
+
+    }
+
+    private void ResetButtons()
     {
 
     }

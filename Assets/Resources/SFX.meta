@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 8f2b5ddb8b0b3b6469aa8d481472e52d
-=======
-guid: 441b40378dd0e0e42950ea239b53c146
->>>>>>> Added titles, credits, and level select scenes. Started work on animation for level select.
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -9,11 +9,10 @@ public class DataBucket : MonoBehaviour {
     public int level;
     public int levelsCleared;
     public string endingCode;
+    public int glitchesKilled;
 
-    public Difficulty levelDifficulty;
-
-    public int currLevel;
-
+    public LevelDataSO levelData;
+    
 	void Start ()
     {
         if (Protected == false)

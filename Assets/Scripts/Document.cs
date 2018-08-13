@@ -12,18 +12,28 @@ public class Document : MonoBehaviour {
     public Text documentText { get;  private set; }
     private DataBucket db;
 
-    float width;
-    float height;
+    private float width;
+    private float height;
+
+    public float charWidth { get; private set; }
+    public float charHeight { get; private set; }
+
+    public float monitorLeft { get; private set; }
+    public float monitorTop { get; private set; }
+    public float monitorRight { get; private set; }
+    public float monitorBottom { get; private set; }
+
+    public float documentLeft { get; private set; }
+    public float documentTop { get; private set; }
+    public float documentRight { get; private set; }
+    public float documentBottom { get; private set; }
 
     private void Awake()
     {
         documentText = GetComponent<Text>();
-    }
-
-    private void Start()
-    {
         db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
     }
+
     public bool SetUpDocument(int level)
     {
 
@@ -49,17 +59,25 @@ public class Document : MonoBehaviour {
             (monitorRect.anchorMax.y - monitorRect.anchorMin.y) *
             (documentRect.anchorMax.y - documentRect.anchorMin.y);
 
+        monitorLeft = Camera.main.pixelWidth * (monitorRect.anchorMax.x - monitorRect.anchorMin.x) / -2.0f;
+        monitorRight = Camera.main.pixelWidth * (monitorRect.anchorMax.x - monitorRect.anchorMin.x) / 2.0f;
+        monitorTop = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) / 2.0f;
+        monitorBottom = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) / -2.0f;
+
+        documentLeft = Camera.main.pixelWidth * (monitorRect.anchorMax.x - monitorRect.anchorMin.x) * (documentRect.anchorMin.x - 0.5f);
+        documentRight = Camera.main.pixelWidth * (monitorRect.anchorMax.x - monitorRect.anchorMin.x) * (documentRect.anchorMax.x - 0.5f);
+        documentTop = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) * (documentRect.anchorMax.y - 0.5f);
+        documentBottom = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) * (documentRect.anchorMin.y - 0.5f);
 
         Debug.Log("Document size: " + width + " x " + height);
+        Debug.Log("Monitor Left: " + monitorLeft + ", Top: " + monitorTop + ", Right: " + monitorRight + ", Bottom: " + monitorBottom);
+        Debug.Log("Document Left: " + documentLeft + ", Top: " + documentTop + ", Right: " + documentRight + ", Bottom: " + documentBottom);
 
         bool working = true;
         int fontSize = 60;
 
         while (working)
         {
-            float charWidth;
-            float charHeight;
-
             int maxWidth;
             int maxHeight;
             
@@ -71,14 +89,14 @@ public class Document : MonoBehaviour {
                 style.font = font;
                 style.fontSize = fontSize;
 
-                Vector2 charSize = style.CalcSize(new GUIContent("a"));
+                Vector2 charSize = style.CalcSize(new GUIContent("1\n2\n3\n4\n5\n6\n7\n8\n9\n0"));
                 charWidth = charSize.x;
-                charHeight = charSize.y;
+                charHeight = charSize.y / 10;
 
                 maxWidth = Mathf.FloorToInt(width / charWidth);
                 maxHeight = Mathf.FloorToInt(height / charHeight);
 
-                Debug.Log("Font Size: " + fontSize + ", Char Size: " + charWidth + " x " + charHeight + ", Max Width: " + maxWidth + ", Max Height: " + maxHeight);
+                // Debug.Log("Font Size: " + fontSize + ", Char Size: " + charWidth + " x " + charHeight + ", Max Width: " + maxWidth + ", Max Height: " + maxHeight);
 
 
                 if (maxWidth < 20)
@@ -90,7 +108,7 @@ public class Document : MonoBehaviour {
                     }
                     else
                     {
-                        fontSize -= 10;
+                        fontSize -= 5;
                     }
                 }
 
@@ -125,7 +143,7 @@ public class Document : MonoBehaviour {
                 }
                 else if(testText[pos] == ' ')
                 {
-                    spaces.Add(new Space(x, y, ' '));
+                    spaces.Add(new Space(x, y, ' ', new Vector2(documentLeft + (x + 0.5f) * charWidth, documentTop - (y + 0.5f) * charHeight)));
                     lastSpace++;
                     lastWordBreak = pos;
                 }
@@ -151,7 +169,7 @@ public class Document : MonoBehaviour {
                     }
                     else
                     {
-                        fontSize -= 10;
+                        fontSize -= 5;
                         break;
                     }
                 }
@@ -170,9 +188,20 @@ public class Document : MonoBehaviour {
             documentText.fontSize = fontSize;
         }
 
-        for(int x = 0; x< spaces.Count;x++)
+        //Debug.Log("spaces: " + spaces.Count);
+
+        //Debug.Log("level " + db.level);
+
+        int initialFill = Mathf.RoundToInt(spaces.Count * db.levelData.data[db.level].percentInitialSpacesFilled);
+        
+        for(int x = 0; x< initialFill;x++)
         {
-            spaces[x] = FillSpace(spaces[x]);
+            int random = 0;
+            do
+            {
+                random = Random.Range(0, spaces.Count);
+            } while (spaces[random].currentChar != ' ');
+            spaces[random] = FillSpace(spaces[random]);
         }
 
 
@@ -232,12 +261,12 @@ public class Document : MonoBehaviour {
 
     public void ClickAt(Vector2Int location)
     {
-        if (db.levelDifficulty == Difficulty.easy)
+        if (db.levelData.data[db.level].difficulty == Difficulty.easy)
         {
-            foreach(Space space in spaces)
+            for(int x = 0;x < spaces.Count;x++)
             {
-                if (space.location == location)
-                    ClearSpace(space);
+                if (spaces[x].location == location)
+                    spaces[x] = ClearSpace(spaces[x]);
             }
         }
         else
@@ -270,22 +299,57 @@ public class Document : MonoBehaviour {
     {
         return documentText.text[VectorToPos(location)];
     }
+
+    public int GetEmptySpace()
+    {
+        int rand;
+        do
+        {
+            rand = Random.Range(0, spaces.Count - 1);
+        } while(spaces[rand].currentChar != ' ');
+        //Debug.Log("Int space " + spaces[rand].location + " Monitor Space: " + spaces[rand].monitorLocation);
+        return rand;
+    }
+
+    public float RowHeight(int y)
+    {
+        return documentTop - (y + 0.5f) * charHeight;
+    }
+
+    public void ReportKill()
+    {
+        db.glitchesKilled++;
+    }
+
+    public int CountOpenSpaces()
+    {
+        int count = 0;
+        foreach(Space space in spaces)
+        {
+            if (space.currentChar == ' ')
+                count++;
+        }
+        return count;
+    }
 }
 
 public struct Space
 {
     public Vector2Int location;
     public char currentChar;
+    public Vector3 monitorLocation;
 
-    public Space(Vector2Int loc, char c)
+    public Space(Vector2Int loc, char c, Vector3 monitor)
     {
         location = loc;
         currentChar = c;
+        monitorLocation = monitor;
     }
 
-    public Space(int x, int y, char c)
+    public Space(int x, int y, char c, Vector3 monitor)
     {
         location = new Vector2Int(x, y);
         currentChar = c;
+        monitorLocation = monitor;
     }
 }

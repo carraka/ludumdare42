@@ -52,4 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
-  levelscleared: 0
+  levelsCleared: 0
+  endingCode: 
+  levelData: {fileID: 11400000, guid: 35ec92fc36a11214ebf765a258073da2, type: 2}

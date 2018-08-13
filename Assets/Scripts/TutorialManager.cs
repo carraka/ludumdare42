@@ -9,17 +9,35 @@ public class TutorialManager : MonoBehaviour {
     private Image tutorialbg;
     private Text tutorialText;
 
+    private DataBucket db;
+
     private int slideNumber;
 
     private void Awake()
     {
         tutorialbg = GameObject.Find("tutorialbg").GetComponent<Image>();
         tutorialText = GameObject.Find("tutorialText").GetComponent<Text>();
+
+        db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
     }
     // Use this for initialization
     void Start () {
-        slideNumber = 1;
-        tutorialText.text = "It's a calm day at the office, until you're assigned to copyedit the manuscript for one of the market's worst hacks. You open the document and notice something's not quite right ...";
+        if (db.mediumTutorialPlayed)
+        {
+            slideNumber = 10;
+            tutorialText.text = "You're getting a hang of the glitch patterns when the glitches start to evolve. Now you must click on the incorrect letter AND type the incorrect letter to restore the space.";
+        }
+        else if (db.hardTutorialPlayed)
+        {
+            slideNumber = 15;
+            tutorialText.text = "Just when you think it can't get worse, you realize your errors are weakening the spaces. Now when you type the wrong letter or try to fix something that's already correct, your accuracy decreases.";
+        }
+        else
+        {
+            slideNumber = 1;
+            tutorialText.text = "It's a calm day at the office, until you're assigned to copyedit the manuscript for one of the market's worst hacks. You open the document and notice something's not quite right ...";
+
+        }
 
     }
 	
@@ -55,6 +73,18 @@ public class TutorialManager : MonoBehaviour {
             case 8:
                 StartCoroutine("LastSlide");
                 return;
+            case 11:
+                db.level = 6;
+                SceneManager.LoadScene("playlevel");
+                return;
+            case 16:
+                tutorialText.text = "Make enough mistakes, and you'll corrupt the spaces, saving fewer of them than you thought. Remember: No one is perfect, but copyeditors should be perfect anyway.";
+                return;
+            case 17:
+                db.level = 16;
+                SceneManager.LoadScene("playlevel");
+                return;
+
             default:
                 return;
         }
@@ -75,14 +105,15 @@ public class TutorialManager : MonoBehaviour {
             else
             {
                 tutorialbg.sprite = Resources.Load<Sprite>("Tutorial/tutorial8");
-                tutorialText.text = "THIS IS FINE. EVERYTHING IS FINE.";
+                tutorialText.text = "WHY DID I DECIDE TO DOUBLE MAJOR IN ENGLISH AND ANTHROPOLOGY INSTEAD OF COMPUTER SCIENCE AND ALIENS WHAT AM I DOING WITH MY LIFE HELP";
                 yield return new WaitForSeconds(0.1f);
 
             }
 
 
         }
-        SceneManager.LoadScene("levelselect");
+        db.level = 1;
+        SceneManager.LoadScene("playlevel");
 
     }
 }

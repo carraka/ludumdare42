@@ -10,7 +10,7 @@ public class LevelSelectManager : MonoBehaviour {
     private Document document;
     private Text currText, nextText, prevText, prevButtonText, nextButtonText;
 
-    public int maxLevel, mediumFirstLevel, hardFirstLevel, currentLevelNumber;
+    public int maxLevel, mediumFirstLevel, hardFirstLevel;
 
     private Image prevPageImage, nextPageImage, mediumLockImage, hardLockImage, nextLockImage, prevButtonImage, nextButtonImage;
     private Button prevButton, nextButton;
@@ -50,8 +50,7 @@ public class LevelSelectManager : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        currentLevelNumber = 1;
-
+        databucket.level = 1;
         maxLevel = 23;
         mediumFirstLevel = 8;
         hardFirstLevel = 16;
@@ -76,7 +75,7 @@ public class LevelSelectManager : MonoBehaviour {
         //currAnim.SetTrigger("turnToNextPage");
         //nextAnim.SetTrigger("turnToNextPage");
         //prevAnim.SetTrigger("turnToNextPage");
-        currentLevelNumber++;
+        databucket.level++;
         ResetVisuals();
           
     }
@@ -87,7 +86,7 @@ public class LevelSelectManager : MonoBehaviour {
         //nextAnim.SetTrigger("turnToPrevPage");
         //prevAnim.SetTrigger("turnToPrevPage");
         Debug.Log("animating previous page");
-        currentLevelNumber--;
+        databucket.level--;
         ResetVisuals();
         Debug.Log("animating previous page");
 
@@ -98,7 +97,7 @@ public class LevelSelectManager : MonoBehaviour {
         switch (difficulty)
         {
             case "easy":
-                currentLevelNumber = 1;
+                databucket.level = 1;
                 ResetVisuals();
                 return;
 
@@ -109,7 +108,7 @@ public class LevelSelectManager : MonoBehaviour {
                 }
                 else
                 {
-                    currentLevelNumber = mediumFirstLevel;
+                    databucket.level = mediumFirstLevel;
                     ResetVisuals();
                     return;
                 }
@@ -121,7 +120,7 @@ public class LevelSelectManager : MonoBehaviour {
                 }
                 else
                 {
-                    currentLevelNumber = hardFirstLevel;
+                    databucket.level = hardFirstLevel;
                     ResetVisuals();
                     return;
                 }
@@ -138,22 +137,22 @@ public class LevelSelectManager : MonoBehaviour {
 
     private void ResetText()
     {
-        currText.text = document.ParseDocument(currentLevelNumber);
-        if (currentLevelNumber == 1)
+        currText.text = document.ParseDocument(databucket.level);
+        if (databucket.level == 1)
         {
             prevText.text = "";
-            nextText.text = document.ParseDocument(currentLevelNumber + 1);
+            nextText.text = document.ParseDocument(databucket.level + 1);
 
         }
-        else if (currentLevelNumber == maxLevel)
+        else if (databucket.level == maxLevel)
         {
-            prevText.text = document.ParseDocument(currentLevelNumber - 1);
+            prevText.text = document.ParseDocument(databucket.level - 1);
             nextText.text = "";
         }
         else
         {
-            prevText.text = document.ParseDocument(currentLevelNumber - 1);
-            nextText.text = document.ParseDocument(currentLevelNumber + 1);
+            prevText.text = document.ParseDocument(databucket.level - 1);
+            nextText.text = document.ParseDocument(databucket.level + 1);
         }
 
 
@@ -161,14 +160,14 @@ public class LevelSelectManager : MonoBehaviour {
 
     private void ResetPagesAndButtons()
     {
-        if (currentLevelNumber == 1)
+        if (databucket.level == 1)
         {
             prevPageImage.enabled = false;
             prevButtonImage.enabled = false;
             prevButton.enabled = false;
             prevButtonText.enabled = false;
         }
-        else if (currentLevelNumber == maxLevel)
+        else if (databucket.level == maxLevel)
         {
             nextPageImage.enabled = false;
             nextButtonImage.enabled = false;
@@ -188,7 +187,7 @@ public class LevelSelectManager : MonoBehaviour {
             nextButtonText.enabled = true;
         }
 
-        if (currentLevelNumber == databucket.levelsCleared)
+        if (databucket.level == databucket.levelsCleared)
         {
             nextLockImage.enabled = true;
             nextButton.enabled = false;

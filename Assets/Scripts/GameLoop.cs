@@ -39,6 +39,11 @@ public class GameLoop : MonoBehaviour {
     private int bigWavesStarted;
     private int surgesSpawned;
 
+    private AudioSource BGM;
+    private AudioSource SFX;
+
+    private AudioClip error;
+
     private GameObject momPrefab;
     private GameObject looperPrefab;
     private GameObject dasherPrefab;
@@ -56,6 +61,11 @@ public class GameLoop : MonoBehaviour {
         textBox = document.GetComponent<Text>();
         clock = GameObject.Find("Clock").GetComponent<Text>();
         spaceCounter = GameObject.Find("SpaceCounter").GetComponent<Text>();
+
+        BGM = GameObject.Find("BGM").GetComponent<AudioSource>();
+        SFX = GameObject.Find("SFX").GetComponent<AudioSource>();
+
+        error = (AudioClip)Resources.Load("SFX/error", typeof(AudioClip));
 
         //Fetch the Raycaster from the GameObject (the Canvas)
         m_Raycaster = GameObject.Find("BGCanvas").GetComponent<GraphicRaycaster>();
@@ -94,6 +104,20 @@ public class GameLoop : MonoBehaviour {
         {
             cursor.GetComponent<Image>().enabled = false;
         }
+
+        AudioClip music = null;
+        switch (Random.Range(0, 2))
+        {
+            case 0:
+                music = (AudioClip)Resources.Load("Music/game theme 1 fixed-ld42", typeof(AudioClip));
+                break;
+            case 1:
+                music = (AudioClip)Resources.Load("Music/game music 2 loop - ld42", typeof(AudioClip));
+                break;
+
+        }
+        BGM.PlayOneShot(music);
+        BGM.loop = true;
 
         playingLevel = false;
 
@@ -196,6 +220,7 @@ public class GameLoop : MonoBehaviour {
             if (db.levelData.data[db.level].difficulty == Difficulty.hard && errors)
             {
                 errorCount++;
+                SFX.PlayOneShot(error);
                 //Debug.Log("Error Count: " + errorCount);
             }
         }

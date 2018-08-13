@@ -88,7 +88,7 @@ public class FeedbackManager : MonoBehaviour {
             spacesSavedText.text = "Spaces Saved:       " + i;
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.06f);
         }
         yield return new WaitForSeconds(0.5f);
 
@@ -98,11 +98,11 @@ public class FeedbackManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
 
         //Displays Glitches Killed
-        for (int i = 1; i <= spacesSaved; i++)
+        for (int i = 1; i <= glitchesKilled; i++)
         {
             glitchesKilledText.text = "Glitches Killed:     " + i;
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.06f);
         }
         yield return new WaitForSeconds(0.5f);
 

@@ -11,6 +11,13 @@ public class Document : MonoBehaviour {
 
     public Text documentText { get;  private set; }
     private DataBucket db;
+    private AudioSource SFX;
+
+    private List<AudioClip> keys;
+    AudioClip glitchLetter;
+    AudioClip glitchDeath;
+    AudioClip glitchHit;
+    AudioClip glitchBirth;
 
     private float width;
     private float height;
@@ -32,6 +39,24 @@ public class Document : MonoBehaviour {
     {
         documentText = GetComponent<Text>();
         db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
+        SFX = GameObject.Find("SFX").GetComponent<AudioSource>();
+
+        keys = new List<AudioClip>();
+
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key1", typeof(AudioClip)));
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key2", typeof(AudioClip)));
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key3", typeof(AudioClip)));
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key4", typeof(AudioClip)));
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key5", typeof(AudioClip)));
+        keys.Add((AudioClip)Resources.Load("SFX/Keys/Key6", typeof(AudioClip)));
+
+        glitchLetter = (AudioClip)Resources.Load("SFX/glitch-alter", typeof(AudioClip));
+        glitchDeath = (AudioClip)Resources.Load("SFX/glitch-death", typeof(AudioClip));
+        glitchHit = (AudioClip)Resources.Load("SFX/glitch-hit", typeof(AudioClip));
+        glitchBirth = (AudioClip)Resources.Load("SFX/glitch-birth", typeof(AudioClip));
+
+
+
     }
 
     public bool SetUpDocument(int level)
@@ -239,6 +264,8 @@ public class Document : MonoBehaviour {
 
     public Space ClearSpace(Space space)
     {
+        SFX.PlayOneShot(keys[Random.Range(0, 5)]);
+
         return FillSpace(space, ' ');
     }
 
@@ -338,6 +365,29 @@ public class Document : MonoBehaviour {
         }
         return count;
     }
+
+    public void PlaySFX(GlitchSFX sfx)
+    {
+        AudioClip sound = null;
+        switch (sfx)
+        {
+            case GlitchSFX.letter:
+                sound = glitchLetter;
+                break;
+            case GlitchSFX.death:
+                sound = glitchDeath;
+                break;
+            case GlitchSFX.hit:
+                sound = glitchHit;
+                break;
+            case GlitchSFX.birth:
+                sound = glitchBirth;
+                break;
+        }
+
+        SFX.PlayOneShot(sound);
+
+    }
 }
 
 public struct Space
@@ -360,3 +410,5 @@ public struct Space
         monitorLocation = monitor;
     }
 }
+
+public enum GlitchSFX { letter, death, hit, birth};

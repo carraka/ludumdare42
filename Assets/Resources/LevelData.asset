@@ -108,7 +108,7 @@ MonoBehaviour:
     bigWaveTimeBetweenSurges: 0
     bigWaveUnitsPerSurge: 5
     bigWaveMomChance: 0
-  - difficulty: 1
+  - difficulty: 2
     MomHP: 0
     glitchSpeed: 1.2
     levelDuration: 60

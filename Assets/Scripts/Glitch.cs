@@ -208,6 +208,7 @@ public class Glitch : MonoBehaviour {
         spaceToReplace = index;
         animator.SetBool("Letter", true);
         state = GlitchState.action;
+        document.PlaySFX(GlitchSFX.letter);
     }
 
     private void newDestination()
@@ -275,6 +276,10 @@ public class Glitch : MonoBehaviour {
             die();
             document.ReportKill();
         }
+        else
+        {
+            document.PlaySFX(GlitchSFX.hit);
+        }
     }
 
     public void die()
@@ -283,6 +288,7 @@ public class Glitch : MonoBehaviour {
         state = GlitchState.dying;
         animationStart = Time.time;
         GetComponent<Image>().raycastTarget = false;
+        document.PlaySFX(GlitchSFX.death);
     }
 }
 

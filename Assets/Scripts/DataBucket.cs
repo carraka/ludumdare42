@@ -6,6 +6,13 @@ public class DataBucket : MonoBehaviour {
 
     private static bool Protected = false;
 
+    public bool easyTutorialPlayed = false;
+    public bool mediumTutorialPlayed = false;
+    public bool hardTutorialPlayed = false;
+
+
+    public static DataBucket instance = null;
+    private AudioSource audioSource;
     public int level;
     public int levelsCleared;
     public string endingCode;
@@ -16,10 +23,21 @@ public class DataBucket : MonoBehaviour {
     public int errorsMade;
 
     public LevelDataSO levelData;
+    
+    public Difficulty levelDifficulty;
 
-    public Difficulty levelDifficulty; 
-
-	void Start ()
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    void Start ()
     {
         if (Protected == false)
         {

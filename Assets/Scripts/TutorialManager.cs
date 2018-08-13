@@ -47,14 +47,13 @@ public class TutorialManager : MonoBehaviour {
                 tutorialText.text = "You click madly on the glitch, and it too vanishes. (Click on the glitches to destroy them before they invade your spaces.) That was odd. Perhaps you're hallucinating. (You're not.)";
                 return;
             case 6:
-                tutorialText.text = "As more glitches appear, you realize you must remove the glitches and the errors they make as fast before you hit your deadline. You're an editor. You can do this. How bad can it get?";
+                tutorialText.text = "As more glitches appear, you realize you must remove all the glitches and the errors they make before you hit your deadline. You're an editor. You can do this. How bad can it get?";
                 return;
             case 7:
-                tutorialText.text = "THIS IS FINE. EVERYTHING IS FINE.";
-                StartCoroutine("LastSlide");
+                tutorialText.text = "That's it! Remove glitches on the page and errors in the text by clicking on them. Save enough spaces to advance to the next page. Run out of spaces, and bad things happen.";
                 return;
             case 8:
-                SceneManager.LoadScene("levelselect");
+                StartCoroutine("LastSlide");
                 return;
             default:
                 return;
@@ -64,10 +63,26 @@ public class TutorialManager : MonoBehaviour {
 
     IEnumerator LastSlide()
     {
-        yield return new WaitForSeconds(0f);
-        slideNumber++;
-        tutorialbg.sprite = Resources.Load<Sprite>("Sprites/Tutorial/tutorial" + slideNumber);
-        tutorialText.text = "Everything is fine.";
+        for (int i = 0; i < 7; i++)
+        {
+            if (i%2 == 0)
+            {
+                tutorialbg.sprite = Resources.Load<Sprite>("Tutorial/tutorial9");
+                tutorialText.text = "Everything is fine.";
+                yield return new WaitForSeconds(0.3f);
+
+            }
+            else
+            {
+                tutorialbg.sprite = Resources.Load<Sprite>("Tutorial/tutorial8");
+                tutorialText.text = "THIS IS FINE. EVERYTHING IS FINE.";
+                yield return new WaitForSeconds(0.1f);
+
+            }
+
+
+        }
+        SceneManager.LoadScene("levelselect");
 
     }
 }

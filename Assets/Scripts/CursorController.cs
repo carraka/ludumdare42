@@ -39,24 +39,31 @@ public class CursorController : MonoBehaviour {
         cursorLocation = location;
         GetComponent<RectTransform>().anchoredPosition = new Vector2(location.x * charWidth, location.y * -charHeight);
         cursorChar.text = document.CharAt(location).ToString();
+        StartTime = Time.time;
     }
 
     public bool CheckKeys()
     {
+        bool moved = false;
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if (cursorLocation.x > 0)
+            {
                 cursorLocation.x--;
-            else if(cursorLocation.y > 0)
+                moved = true;
+            }
+            else if (cursorLocation.y > 0)
             {
                 cursorLocation.y--;
                 cursorLocation.x = document.lineStart[cursorLocation.y + 1] - document.lineStart[cursorLocation.y] - 2;
+                moved = true;
             }
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (cursorLocation.y < document.lineStart.Count - 1)
             {
+                moved = true;
                 cursorLocation.x++;
                 if (document.lineStart[cursorLocation.y] + cursorLocation.x + 1 >= document.lineStart[cursorLocation.y + 1])
                 {
@@ -65,21 +72,29 @@ public class CursorController : MonoBehaviour {
                 }
             }
             else if (document.lineStart[cursorLocation.y] + cursorLocation.x + 1 < document.documentText.text.Length)
+            {
                 cursorLocation.x++;
+                moved = true;
+            }
 
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             cursorLocation.y--;
+            moved = true;
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             cursorLocation.y++;
+            moved = true;
         }
 
-        cursorLocation = document.ClampToText(cursorLocation);
+        if (moved == true)
+        { 
+            cursorLocation = document.ClampToText(cursorLocation);
 
-        MoveCursor(cursorLocation);
+            MoveCursor(cursorLocation);
+        }
 
         for(int x = 0; x< document.spaces.Count;x++)
         {
@@ -90,6 +105,7 @@ public class CursorController : MonoBehaviour {
                 if(Input.GetKeyDown((KeyCode)((int)KeyCode.A + (int)document.spaces[x].currentChar - (int)'a')))
                 {
                     document.spaces[x] = document.ClearSpace(document.spaces[x]);
+                    cursorChar.text = " ";
                     return false;
                 }
             }

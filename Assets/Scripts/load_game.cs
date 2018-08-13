@@ -12,6 +12,7 @@ public class load_game : MonoBehaviour {
     //private AudioSource buttonSound;
     private DataBucket databucket;
 
+
     private AudioSource menuMusic;
     public int currPage;
 
@@ -40,9 +41,72 @@ public class load_game : MonoBehaviour {
 		}
 		else
 		{
-			//buttonSound.Play ();
-			SceneManager.LoadScene("levelselect");
-			GameObject.Find ("mainmenu_loop").GetComponent<AudioSource> ().Stop ();
+            switch (databucket.level)
+            {
+                case 1:
+                    if (!databucket.easyTutorialPlayed)
+                    {
+                        databucket.easyTutorialPlayed = true;
+                        SceneManager.LoadScene("tutorial");
+                    }
+                    else
+                    {
+                        //load level 1
+                    }
+                    return;
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    //load appropriate level
+                    return;
+                case 6:
+                    if (!databucket.mediumTutorialPlayed)
+                    {
+                        databucket.mediumTutorialPlayed = true;
+                        SceneManager.LoadScene("tutorial");
+                    }
+                    else
+                    {
+                        //load level 6
+                    }
+                    return;
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                    //load appropriate level;
+                    return;
+                case 16:
+                    if (!databucket.hardTutorialPlayed)
+                    {
+                        databucket.hardTutorialPlayed = true;
+                        SceneManager.LoadScene("tutorial");
+                    }
+                    else
+                    {
+                        //load level 16
+                    }
+                    return;
+                case 17:
+                case 18:
+                case 19:
+                case 20:
+                case 21:
+                case 22:
+                case 23:
+                    //load appropriate level;
+                    return;
+                default:
+                    Debug.Log("level does not exist");
+                    return;
+            }
+			//GameObject.Find ("mainmenu_loop").GetComponent<AudioSource> ().Stop ();
 		}
 
 		
@@ -65,8 +129,8 @@ public class load_game : MonoBehaviour {
 
 
         if (SceneManager.GetActiveScene().name == "Level 1" || SceneManager.GetActiveScene().name == "ending")
+            //play menu music
             return;
-			//play menu music
 		
 	}
 

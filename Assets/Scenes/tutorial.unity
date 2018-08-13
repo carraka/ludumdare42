@@ -247,7 +247,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: '>>'
 --- !u!222 &38197020
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 48904374}
   - component: {fileID: 48904373}
   m_Layer: 5
-  m_Name: Button
+  m_Name: nextSlideButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -290,8 +290,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -28.3, y: 16.8}
-  m_SizeDelta: {x: 50.600006, y: 30}
+  m_AnchoredPosition: {x: -28.3, y: 14.3}
+  m_SizeDelta: {x: 50.6, y: 25.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &48904373
 MonoBehaviour:
@@ -331,7 +331,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 48904374}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 337960032}
+        m_MethodName: NextSlide
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &48904374
@@ -447,6 +458,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &337960031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 337960033}
+  - component: {fileID: 337960032}
+  m_Layer: 0
+  m_Name: TutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &337960032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337960031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898230e805df6b34f882c209285ed469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &337960033
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 337960031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 389.37286, y: 176.54889, z: -8.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &903992926
 GameObject:
@@ -692,7 +743,7 @@ GameObject:
   - component: {fileID: 2064211421}
   - component: {fileID: 2064211420}
   m_Layer: 5
-  m_Name: Text
+  m_Name: tutorialText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -713,7 +764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 3.100006, y: -3.0999985}
+  m_AnchoredPosition: {x: 3.1000366, y: -3.0999985}
   m_SizeDelta: {x: -6.2, y: -6.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2064211420
@@ -746,11 +797,11 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: It's a calm day at the office, until you're assigned to copyedit the manuscript
-    for one of the market's worst hacks. You open the document and notice something's
-    not quite right ...
+  m_Text: That extra O! It just leaps out at you! AoHistorically?! Why is there a
+    letter O instead of a space? Why is the space gone? Such an egregious mistake,
+    just on  the title page? Who is Mr. Plum's typist?
 --- !u!222 &2064211421
 CanvasRenderer:
   m_ObjectHideFlags: 0

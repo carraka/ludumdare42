@@ -51,14 +51,14 @@ public class load_game : MonoBehaviour {
                     }
                     else
                     {
-                        //load level 1
+                        SceneManager.LoadScene("playlevel");
                     }
                     return;
                 case 2:
                 case 3:
                 case 4:
                 case 5:
-                    //load appropriate level
+                    SceneManager.LoadScene("playlevel");
                     return;
                 case 6:
                     if (!databucket.mediumTutorialPlayed)
@@ -68,7 +68,7 @@ public class load_game : MonoBehaviour {
                     }
                     else
                     {
-                        //load level 6
+                        SceneManager.LoadScene("playlevel");
                     }
                     return;
                 case 7:
@@ -80,7 +80,7 @@ public class load_game : MonoBehaviour {
                 case 13:
                 case 14:
                 case 15:
-                    //load appropriate level;
+                    SceneManager.LoadScene("playlevel");
                     return;
                 case 16:
                     if (!databucket.hardTutorialPlayed)
@@ -90,7 +90,7 @@ public class load_game : MonoBehaviour {
                     }
                     else
                     {
-                        //load level 16
+                        SceneManager.LoadScene("playlevel");
                     }
                     return;
                 case 17:
@@ -100,7 +100,7 @@ public class load_game : MonoBehaviour {
                 case 21:
                 case 22:
                 case 23:
-                    //load appropriate level;
+                    SceneManager.LoadScene("playlevel");
                     return;
                 default:
                     Debug.Log("level does not exist");
@@ -136,10 +136,10 @@ public class load_game : MonoBehaviour {
 
     public void RestartLevel()
     {
-        //restart the most recent level according to DataBucket
+        SceneManager.LoadScene("playlevel");
     }
 
-	/*public void Instructions(){
+    /*public void Instructions(){
 		//buttonSound.Play ();
 
 		if (instructionsOpen)

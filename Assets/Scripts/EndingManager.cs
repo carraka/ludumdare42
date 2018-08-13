@@ -6,12 +6,13 @@ using UnityEngine.UI;
 public class EndingManager : MonoBehaviour {
 
     private DataBucket databucket;
-    private Image illustration;
+    private Image illustration, textbox;
     private Text endingText;
 
     private void Awake()
     {
         illustration = GameObject.Find("endingIllustration").GetComponent<Image>();
+        textbox = GameObject.Find("bottomUI").GetComponent<Image>();
         endingText = GameObject.Find("endingText").GetComponent<Text>();
         databucket = GameObject.Find("DataBucket").GetComponent<DataBucket>();
     }
@@ -22,14 +23,17 @@ public class EndingManager : MonoBehaviour {
         switch (databucket.endingCode)
         {
             case "fail":
-                audio.PlayOneShot((AudioClip)Resources.Load("Audio/Music/ld41_ending_chicken"));
+                //audio.PlayOneShot((AudioClip)Resources.Load("Music/ld41_ending_chicken"));
                 illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/badend_clean");
+                textbox.sprite = Resources.Load<Sprite>("Sprites/Endings/gameover");
                 endingText.text = "You ran out of spaces! The glitches have invaded your manuscript, delaying the publication date by weeks! Not that you were around to see it. The bestselling machine will churn on without you.";
                 break;
 
             case "succeed":
                 illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/goodend_clean");
-                audio.PlayOneShot((AudioClip)Resources.Load("Audio/Music/ld41_ending_romantic"));
+                textbox.sprite = Resources.Load<Sprite>("Sprites/Endings/youdidit");
+
+                //audio.PlayOneShot((AudioClip)Resources.Load("Music/ld41_ending_romantic"));
                 endingText.text = "You saved the spaces! The book you edited catapults to the top of the bestseller list, and your job is secure. If only you had had time to do a proper edit. Not that it would have helped the story much ...";
                 break;
         }

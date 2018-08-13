@@ -40,11 +40,12 @@ public class FeedbackManager : MonoBehaviour {
 	
 	void UpdateNumbers()
     {
-        spacesSaved = 2f;
-        totalSpaces = 5f;
-        percentageSaved = spacesSaved / totalSpaces * 100f;
-        errorsMade = 3f;
-        glitchesKilled = 10;
+        spacesSaved = databucket.spacesSaved;
+        totalSpaces = databucket.levelSpaces;
+        errorsMade = databucket.errorsMade;
+        percentageSaved = 100f * spacesSaved / (totalSpaces + errorsMade);
+
+        glitchesKilled = databucket.glitchesKilled;
 
         if (percentageSaved == 100)
         {
@@ -57,7 +58,7 @@ public class FeedbackManager : MonoBehaviour {
             ratingText.text = "You Might Be Good in Three Years";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/goodkitty1");
         }
-        else if (percentageSaved > 70)
+        else if (percentageSaved >= databucket.levelData.data[databucket.level].clearPercent * 100f)
         {
             ratingText.text = "Good Enough to Keep Your Job";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/badkitty1");
@@ -66,6 +67,11 @@ public class FeedbackManager : MonoBehaviour {
         {
             ratingText.text = "This Cat Edits Better Than You";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/ragekitty1");
+        }
+
+        if (percentageSaved >= databucket.levelData.data[databucket.level].clearPercent * 100f)
+        {
+            databucket.levelsCleared = Mathf.Max(databucket.level, databucket.levelsCleared);
         }
     }
 

@@ -41,6 +41,7 @@ public class Glitch : MonoBehaviour {
         movementSpeed = mSpeed;
         HP = health;
         document = doc;
+        scannerCurrentRow = 99999;
 
 
 
@@ -225,9 +226,7 @@ public class Glitch : MonoBehaviour {
                 destination = location + (destination - location).normalized * Random.Range(1f, 3f) / Time.deltaTime * movementSpeed;
                 break;
             case GlitchType.scanner:
-                if (location.x < document.monitorLeft)
-                    destination = new Vector3(document.documentRight + 25, document.RowHeight(0));
-                else if(scannerCurrentRow == document.lineStart.Count)
+                if(scannerCurrentRow >= document.lineStart.Count)
                 {
                     scannerCurrentRow = 0;
                     destination = new Vector3(document.documentLeft - 25, document.RowHeight(scannerCurrentRow));

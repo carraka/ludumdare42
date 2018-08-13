@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 
 public class GameLoop : MonoBehaviour {
 
@@ -181,7 +183,7 @@ public class GameLoop : MonoBehaviour {
         if (!playingLevel)
             return;
 
-        SpawnGlitches();
+        SpawnWaves();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -205,20 +207,14 @@ public class GameLoop : MonoBehaviour {
         if(Time.time >= levelStartTime + db.levelData.data[db.level].levelDuration)
         {
             playingLevel = false;
-            //StartCoroutine(ToEvaluation());
+            StartCoroutine(ToEvaluation());
             Debug.Log("Time Up");
-
-            Glitch[] glitches = GetComponentsInChildren<Glitch>();
-            foreach (Glitch glitch in glitches)
-            {
-                glitch.enabled = false;
-            }
         }
 
         if(openSpaces == 0)
         {
             playingLevel = false;
-            //StartCoroutine(OutOfSpace());
+            StartCoroutine(OutOfSpace());
             Debug.Log("Out of Space[s]");
         }
 
@@ -228,17 +224,82 @@ public class GameLoop : MonoBehaviour {
     {
         Glitch[] glitches = GetComponentsInChildren<Glitch>();
         foreach (Glitch glitch in glitches)
+        {
             glitch.enabled = false;
+        }
 
-        yield return null;
+        GameObject timeUp = GameObject.Find("timeUp");
+
+        for (float t = Mathf.PI / 2; t > -Mathf.PI / 2; t -= .01f)
+        {
+            Vector3 pos = timeUp.GetComponent<RectTransform>().localPosition;
+            pos.x = 1600 * Mathf.Sin(t) * Mathf.Abs(Mathf.Sin(t));
+            timeUp.GetComponent<RectTransform>().localPosition = pos;
+            yield return null;
+
+        }
+        GameObject anyKey = GameObject.Find("anyKey");
+
+        for (float x = 1230; x > 230; x -= 20)
+        {
+            Vector3 pos = anyKey.GetComponent<RectTransform>().localPosition;
+            pos.x = x;
+            anyKey.GetComponent<RectTransform>().localPosition = pos;
+            yield return null;
+        }
+
+        Color color = anyKey.GetComponent<Text>().color;
+        float startTime = Time.time;
+        do
+        {
+            color.a = Mathf.Cos(startTime - Time.time) * Mathf.Cos(startTime - Time.time);
+            anyKey.GetComponent<Text>().color = color;
+            yield return null;
+        } while (Input.anyKeyDown == false);
+
+        db.spacesSaved = document.CountOpenSpaces();
+        db.levelSpaces = document.spaces.Count;
+        db.errorsMade = errorCount;
+        SceneManager.LoadScene("feedback");
+
     }
 
     private IEnumerator OutOfSpace()
     {
-        Glitch[] glitches = GetComponentsInChildren<Glitch>();
-        foreach (Glitch glitch in glitches)
-            glitch.enabled = false;
-        yield return null;
+        GameObject outOfSpace = GameObject.Find("outOfSpace");
+        for (int y = 800; y > 0; y -= 20)
+        {
+            Vector3 pos = outOfSpace.GetComponent<RectTransform>().localPosition;
+            pos.y = y;
+            outOfSpace.GetComponent<RectTransform>().localPosition = pos;
+            yield return null;
+        }
+        for (int x = 3; x <= 11; x += 4)
+        {
+            for (int loop = 0; loop < 30; loop++)
+            {
+                char letter = (char)((int)'a' + Random.Range(0, 26));
+                string text = outOfSpace.GetComponent<Text>().text;
+                text = text.Substring(0, x) + letter + text.Substring(x + 1);
+                outOfSpace.GetComponent<Text>().text = text;
+                yield return null;
+            }
+        }
+        RectTransform rotation = GameObject.Find("extraS").GetComponent<RectTransform>();
+        for (int z = 0;z <= 60; z+= 2)
+        {
+            rotation.rotation = Quaternion.Euler(0, 0, -z);
+            yield return null;
+        }
+        GameObject buttons = GameObject.Find("buttonAnchor");
+
+        for (int y = -600; y <=-150; y += 20)
+        {
+            Vector3 pos = buttons.GetComponent<RectTransform>().localPosition;
+            pos.y = y;
+            buttons.GetComponent<RectTransform>().localPosition = pos;
+            yield return null;
+        }
     }
 
 
@@ -287,88 +348,31 @@ public class GameLoop : MonoBehaviour {
         }
     }
 
-    private void SpawnGlitches()
+    private void SpawnWaves()
     {
+        bool momSpawned = false;
+        bool scannerSpawned = false;
+
         if (smallWavesSpawned < db.levelData.data[db.level].smallWaves && Time.time >= nextSmallWave)
         {
             for (int x = 0; x < db.levelData.data[db.level].smallUnitsPerWave; x++)
             {
-                GameObject newGlitch;
-
-                if (Random.Range(0f, 1f) < db.levelData.data[db.level].smallMomChance)
+                if (Random.Range(0f, 1f) < db.levelData.data[db.level].smallMomChance && momSpawned == false)
                 {
-                    Vector2 spawnLocation;
-                    int rand = Random.Range(0, 4);
-                    switch(rand)
-                    {
-                        case 0:
-                            spawnLocation = new Vector2(501, 460);
-                            break;
-                        case 1:
-                            spawnLocation = new Vector2(601, -360);
-                            break;
-                        case 2:
-                            spawnLocation = new Vector2(-501, -460);
-                            break;
-                        default:
-                            spawnLocation = new Vector2(-601, 360);
-                            break;
-
-                    }
-                    newGlitch = Instantiate(momPrefab, monitorTransform);
-                    newGlitch.GetComponent<Glitch>().Initiate(GlitchType.mom, new Vector2(0, 0), db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>(), db.levelData.data[db.level].MomHP);
+                    SpawnMom();
+                    momSpawned = true;
                 }
                 else
                 {
-                    int rand = Random.Range(0, 4);
-
-                    float startPos = Random.Range(0f, (document.monitorTop + document.monitorRight + 50)* 2.0f);
-                    //Debug.Log(startPos);
-                    Vector2 spawnLocation = Vector2.zero;
-
-                    switch(rand)
+                    int rand;
+                    if (scannerSpawned)
+                        rand = Random.Range(1, 4);
+                    else
                     {
-                        case 0:
-                            if (startPos < document.monitorRight * 2.0f + 50)
-                                spawnLocation = new Vector2(startPos - document.monitorRight - 25, document.monitorTop);
-                            else
-                                spawnLocation = new Vector2(document.monitorRight + 25, startPos - (document.monitorRight * 2.0f + 50) - document.monitorTop - 25);
-
-                            if (Random.Range(0, 2) == 1)
-                                spawnLocation *= -1;
-
-                            newGlitch = Instantiate(dasherPrefab, monitorTransform);
-                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.dasher, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
-                            break;
-                        case 1:
-                            spawnLocation = new Vector2(document.monitorLeft - 25, document.RowHeight(0));
-                            newGlitch = Instantiate(scannerPrefab, monitorTransform);
-                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.scanner, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
-                            break;
-                        case 2:
-                            if (Random.Range(0, 2) == 1)
-                                spawnLocation.x = document.monitorLeft - 25;
-                            else spawnLocation.x = document.monitorRight + 25;
-
-                            spawnLocation.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
-
-                            newGlitch = Instantiate(looperPrefab, monitorTransform);
-                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.looper, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
-                            break;
-                        default:
-                            if (startPos < document.monitorRight * 2.0f + 50)
-                                spawnLocation = new Vector2(startPos - document.monitorRight - 25, document.monitorTop);
-                            else
-                                spawnLocation = new Vector2(document.monitorRight + 25, startPos - (document.monitorRight * 2.0f + 50) - document.monitorTop - 25);
-
-                            if (Random.Range(0, 2) == 1)
-                                spawnLocation *= -1;
-
-                            newGlitch = Instantiate(eraticPrefab, monitorTransform);
-                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.eratic, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
-                            break;
-
+                        rand = Random.Range(0, 4);
+                        scannerSpawned = true;
                     }
+                    SpawnGlitch(rand);
                 }
 
             }
@@ -377,7 +381,131 @@ public class GameLoop : MonoBehaviour {
 
             if (smallWavesSpawned < db.levelData.data[db.level].smallWaves)
                 nextSmallWave += db.levelData.data[db.level].smallTimeBetweenWaves;
+            else nextSmallWave = Mathf.Infinity;
         }
+
+        if(bigWavesStarted < db.levelData.data[db.level].bigWaves && Time.time >= nextBigWave)
+        {
+            surgesSpawned = 0;
+            nextSurge = nextBigWave;
+            bigWavesStarted++;
+
+            if (bigWavesStarted < db.levelData.data[db.level].bigWaves)
+                nextBigWave += db.levelData.data[db.level].bigTimeBetweenWaves;
+            else nextBigWave = Mathf.Infinity;
+        }
+
+        if(surgesSpawned < db.levelData.data[db.level].bigWaveSurges && Time.time >= nextSurge)
+        {
+            for (int x = 0; x < db.levelData.data[db.level].bigWaveUnitsPerSurge; x++)
+            {
+                if (Random.Range(0f, 1f) < db.levelData.data[db.level].bigWaveMomChance && momSpawned)
+                {
+                    SpawnMom();
+                    momSpawned = true;
+                }
+                else
+                {
+                    int rand;
+                    if (scannerSpawned)
+                        rand = Random.Range(1, 4);
+                    else
+                    {
+                        rand = Random.Range(0, 4);
+                        scannerSpawned = true;
+                    }
+
+                    SpawnGlitch(rand);
+                }
+
+            }
+
+            surgesSpawned++;
+
+            if (surgesSpawned < db.levelData.data[db.level].bigWaveSurges)
+                nextSurge += db.levelData.data[db.level].bigWaveTimeBetweenSurges;
+            else nextSurge = Mathf.Infinity;
+
+        }
+    }
+
+    private void SpawnGlitch(int num)
+    {
+        GameObject newGlitch;
+
+        float startPos = Random.Range(0f, (document.monitorTop + document.monitorRight + 50) * 2.0f);
+        //Debug.Log(startPos);
+        Vector2 spawnLocation = Vector2.zero;
+
+        switch (num)
+        {
+            case 0:
+                if (startPos < document.monitorRight * 2.0f + 50)
+                    spawnLocation = new Vector2(startPos - document.monitorRight - 25, document.monitorTop);
+                else
+                    spawnLocation = new Vector2(document.monitorRight + 25, startPos - (document.monitorRight * 2.0f + 50) - document.monitorTop - 25);
+
+                if (Random.Range(0, 2) == 1)
+                    spawnLocation *= -1;
+
+                newGlitch = Instantiate(dasherPrefab, monitorTransform);
+                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.dasher, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
+                break;
+            case 1:
+                spawnLocation = new Vector2(document.monitorLeft - 25, document.RowHeight(0));
+                newGlitch = Instantiate(scannerPrefab, monitorTransform);
+                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.scanner, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
+                break;
+            case 2:
+                if (Random.Range(0, 2) == 1)
+                    spawnLocation.x = document.monitorLeft - 25;
+                else spawnLocation.x = document.monitorRight + 25;
+
+                spawnLocation.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
+
+                newGlitch = Instantiate(looperPrefab, monitorTransform);
+                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.looper, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
+                break;
+            default:
+                if (startPos < document.monitorRight * 2.0f + 50)
+                    spawnLocation = new Vector2(startPos - document.monitorRight - 25, document.monitorTop);
+                else
+                    spawnLocation = new Vector2(document.monitorRight + 25, startPos - (document.monitorRight * 2.0f + 50) - document.monitorTop - 25);
+
+                if (Random.Range(0, 2) == 1)
+                    spawnLocation *= -1;
+
+                newGlitch = Instantiate(eraticPrefab, monitorTransform);
+                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.eratic, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
+                break;
+        }
+
+
+    }
+    private void SpawnMom()
+    {
+        Vector2 spawnLocation;
+        int rand = Random.Range(0, 4);
+        switch (rand)
+        {
+            case 0:
+                spawnLocation = new Vector2(501, 460);
+                break;
+            case 1:
+                spawnLocation = new Vector2(601, -360);
+                break;
+            case 2:
+                spawnLocation = new Vector2(-501, -460);
+                break;
+            default:
+                spawnLocation = new Vector2(-601, 360);
+                break;
+
+        }
+        GameObject newGlitch = Instantiate(momPrefab, monitorTransform);
+        newGlitch.GetComponent<Glitch>().Initiate(GlitchType.mom, new Vector2(0, 0), db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>(), db.levelData.data[db.level].MomHP);
+
+
     }
 
     private string secondsToClock(float seconds)
@@ -392,5 +520,16 @@ public class GameLoop : MonoBehaviour {
             output += "0";
         output += sec;
         return output;
+    }
+
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene("playlevel");
+
+    }
+
+    public void ToLevelSelect()
+    {
+        SceneManager.LoadScene("levelselect");
     }
 }

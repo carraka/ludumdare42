@@ -302,13 +302,20 @@ public class Document : MonoBehaviour {
 
     public int GetEmptySpace()
     {
-        int rand;
-        do
+        if (CountOpenSpaces() == 0)
         {
-            rand = Random.Range(0, spaces.Count - 1);
-        } while(spaces[rand].currentChar != ' ');
+            return Random.Range(0, spaces.Count - 1);
+        }
+        else
+        {
+            int rand;
+            do
+            {
+                rand = Random.Range(0, spaces.Count - 1);
+            } while (spaces[rand].currentChar != ' ');
+            return rand;
+        }
         //Debug.Log("Int space " + spaces[rand].location + " Monitor Space: " + spaces[rand].monitorLocation);
-        return rand;
     }
 
     public float RowHeight(int y)

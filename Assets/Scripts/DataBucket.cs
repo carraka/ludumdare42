@@ -9,7 +9,11 @@ public class DataBucket : MonoBehaviour {
     public int level;
     public int levelsCleared;
     public string endingCode;
+
+    public int spacesSaved;
     public int glitchesKilled;
+    public int levelSpaces;
+    public int errorsMade;
 
     public LevelDataSO levelData;
 

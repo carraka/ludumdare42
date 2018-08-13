@@ -12,7 +12,9 @@ public class DataBucket : MonoBehaviour {
     public int glitchesKilled;
 
     public LevelDataSO levelData;
-    
+
+    public Difficulty levelDifficulty; 
+
 	void Start ()
     {
         if (Protected == false)

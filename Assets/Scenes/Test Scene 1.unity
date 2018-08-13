@@ -219,6 +219,7 @@ MonoBehaviour:
   endingCode: 
   glitchesKilled: 0
   levelData: {fileID: 11400000, guid: 35ec92fc36a11214ebf765a258073da2, type: 2}
+  levelDifficulty: 0
 --- !u!4 &229272308
 Transform:
   m_ObjectHideFlags: 0
@@ -759,7 +760,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Spaces '
 --- !u!222 &1268347013
@@ -914,7 +915,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 0:00
 --- !u!222 &1518193575

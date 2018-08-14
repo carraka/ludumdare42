@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class FeedbackManager : MonoBehaviour {
 
     private DataBucket databucket;
 
-    private Text spacesSavedText, glitchesKilledText, errorsMadeText, percentSavedText, QAText, ratingText;
-    private Image kittyStamp;
+    private Text spacesSavedText, glitchesKilledText, errorsMadeText, percentSavedText, QAText, ratingText, nextButtonText;
+    private Image kittyStamp, nextButtonImage, returnButton;
 
-    private float spacesSaved, glitchesKilled, totalSpaces, errorsMade;
+    private int spacesSaved, glitchesKilled, totalSpaces, errorsMade;
     private float percentageSaved;
 
     private AudioSource audio;
@@ -26,6 +27,11 @@ public class FeedbackManager : MonoBehaviour {
         percentSavedText = GameObject.Find("percentSavedText").GetComponent<Text>();
         QAText = GameObject.Find("QAText").GetComponent<Text>();
         ratingText = GameObject.Find("ratingText").GetComponent<Text>();
+
+        nextButtonImage = GameObject.Find("nextPageButton").GetComponent<Image>();
+        returnButton = GameObject.Find("returnButton").GetComponent<Image>();
+        nextButtonText = GameObject.Find("nextButtonText").GetComponent<Text>();
+
 
         kittyStamp = GameObject.Find("kittyStamp").GetComponent<Image>();
 
@@ -47,31 +53,32 @@ public class FeedbackManager : MonoBehaviour {
 
         glitchesKilled = databucket.glitchesKilled;
 
-        if (percentageSaved == 100)
+        if (percentageSaved > 90)
         {
             ratingText.text = "Expect Promotion Someday";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/perfectkitty1");
-            
+
+
+
         }
-        else if (percentageSaved > 85)
+        else if (percentageSaved > 80)
         {
             ratingText.text = "You Might Be Good in Three Years";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/goodkitty1");
+
         }
         else if (percentageSaved >= databucket.levelData.data[databucket.level].clearPercent * 100f)
         {
             ratingText.text = "Good Enough to Keep Your Job";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/badkitty1");
+
+
         }
         else
         {
             ratingText.text = "This Cat Edits Better Than You";
             kittyStamp.sprite = Resources.Load<Sprite>("Sprites/Kitty Stamps/ragekitty1");
-        }
-
-        if (percentageSaved >= databucket.levelData.data[databucket.level].clearPercent * 100f)
-        {
-            databucket.levelsCleared = Mathf.Max(databucket.level, databucket.levelsCleared);
+            databucket.endingCode = "fail";
         }
     }
 
@@ -83,12 +90,14 @@ public class FeedbackManager : MonoBehaviour {
 
         //Displays Spaces Saved
         yield return new WaitForSeconds(0.5f);
+
         for (int i = 1; i <= spacesSaved; i++)
         {
-            spacesSavedText.text = "Spaces Saved:       " + i;
+            spacesSavedText.text = "Spaces Saved: " + i;
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
 
-            yield return new WaitForSeconds(0.06f);
+            if (spacesSaved != 0)
+                yield return new WaitForSeconds(1f / spacesSaved);
         }
         yield return new WaitForSeconds(0.5f);
 
@@ -98,25 +107,32 @@ public class FeedbackManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
 
         //Displays Glitches Killed
+
         for (int i = 1; i <= glitchesKilled; i++)
         {
-            glitchesKilledText.text = "Glitches Killed:     " + i;
+            glitchesKilledText.text = "Glitches Killed: " + i;
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
-            yield return new WaitForSeconds(0.06f);
+
+            if (glitchesKilled != 0)
+                yield return new WaitForSeconds(1f / glitchesKilled);
         }
         yield return new WaitForSeconds(0.5f);
 
         //Displays Errors Made
-        if (databucket.levelDifficulty == Difficulty.hard)
+        if (databucket.levelData.data[databucket.level].difficulty == Difficulty.hard)
         {
             //Displays Percentage Saved
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
             errorsMadeText.enabled = true;
-            for (int i = 0; i <= errorsMade; i++)
+
+            for (int i = 1; i <= errorsMade; i++)
+
             {
-                errorsMadeText.text = "Errors Made:  " + i;
+                errorsMadeText.text = "Errors Made: " + i;
                 audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
-                yield return new WaitForSeconds(0.06f);
+
+                if (errorsMade != 0)
+                  yield return new WaitForSeconds(1f / errorsMade);
 
             }
             yield return new WaitForSeconds(0.5f);
@@ -126,11 +142,14 @@ public class FeedbackManager : MonoBehaviour {
         //Displays Percentage Saved
         audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
         percentSavedText.enabled = true;
+
         for (int i = 0; i <= percentageSaved; i++)
         {
-            percentSavedText.text = "Percentage Saved:  " + i + "%";
+            percentSavedText.text = "Percentage Saved: " + i + "%";
             audio.PlayOneShot((AudioClip)Resources.Load("SFX/Keys/Key6-short"));
-            yield return new WaitForSeconds(0.06f);
+
+            if (percentageSaved != 0)
+                yield return new WaitForSeconds(1f / percentageSaved);
 
         }
         yield return new WaitForSeconds(0.5f);
@@ -145,7 +164,7 @@ public class FeedbackManager : MonoBehaviour {
 
         kittyStamp.enabled = true;
         
-        if (percentageSaved<70)
+        if (percentageSaved < databucket.levelData.data[databucket.level].clearPercent * 100f)
         {
             audio.PlayOneShot((AudioClip)Resources.Load("Music/00FAIL-ld42"));
 
@@ -153,8 +172,14 @@ public class FeedbackManager : MonoBehaviour {
         else
         {
             audio.PlayOneShot((AudioClip)Resources.Load("Music/00WIN-ld42"));
-
+            databucket.levelsCleared = Mathf.Max(databucket.level, databucket.levelsCleared);
         }
+
+        yield return new WaitForSeconds(1.5f);
+
+        nextButtonImage.enabled = true;
+        nextButtonText.enabled = true;
+        returnButton.enabled = true;
     }
 
     public void DisableVisuals()
@@ -164,5 +189,32 @@ public class FeedbackManager : MonoBehaviour {
         ratingText.enabled = false;
         QAText.enabled = false;
         kittyStamp.enabled = false;
+        percentSavedText.enabled = false;
+        errorsMadeText.enabled = false;
+    }
+
+    public void NextButton()
+    {
+        if (percentageSaved >= databucket.levelData.data[databucket.level].clearPercent * 100f)
+        {
+            if (databucket.level == 23)
+            {
+                databucket.endingCode = "succeed";
+                SceneManager.LoadScene("ending");
+                return;
+            }
+            else
+            {
+                databucket.level++;
+                GameObject.Find("LoadLevelManager").GetComponent<load_game>().LoadLevel();
+            }
+        }
+        else
+        {
+            databucket.endingCode = "fail";
+            SceneManager.LoadScene("ending");
+            return;
+        }
+
     }
 }

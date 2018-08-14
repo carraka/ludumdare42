@@ -4,30 +4,32 @@ using UnityEngine;
 
 public class DataBucket : MonoBehaviour {
 
-    private static bool Protected = false;
+    public static DataBucket instance = null;
 
     public int level;
     public int levelsCleared;
-    public string endingCode;
+    public string endingCode = null;
 
     public int spacesSaved;
     public int glitchesKilled;
     public int levelSpaces;
     public int errorsMade;
 
+    public bool easyTutorialPlayed;
+    public bool mediumTutorialPlayed;
+    public bool hardTutorialPlayed;
+
     public LevelDataSO levelData;
 
-    public Difficulty levelDifficulty; 
-
-	void Start ()
+	void Awake ()
     {
-        if (Protected == false)
+        if (instance == null)
         {
             DontDestroyOnLoad(this);
-            Protected = true;
+            instance = this;
         }
         else
-            DestroyImmediate(this);
+            Destroy(gameObject);
 	}
 }
 

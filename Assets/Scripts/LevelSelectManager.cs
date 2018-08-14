@@ -8,9 +8,9 @@ public class LevelSelectManager : MonoBehaviour {
     private DataBucket databucket;
     private load_game load_game;
     private Document document;
-    private Text currText, nextText, prevText, prevButtonText, nextButtonText;
+    private Text currText, nextText, prevText, prevButtonText, nextButtonText, levelInfo;
 
-    public int maxLevel, mediumFirstLevel, hardFirstLevel, currentLevelNumber;
+    public int maxLevel, mediumFirstLevel, hardFirstLevel;
 
     private Image prevPageImage, nextPageImage, mediumLockImage, hardLockImage, nextLockImage, prevButtonImage, nextButtonImage;
     private Button prevButton, nextButton;
@@ -26,6 +26,7 @@ public class LevelSelectManager : MonoBehaviour {
         currText = GameObject.Find("currPageText").GetComponent<Text>();
         nextText = GameObject.Find("nextPageText").GetComponent<Text>();
         prevText = GameObject.Find("prevPageText").GetComponent<Text>();
+        levelInfo = GameObject.Find("levelInfo").GetComponent<Text>();
 
         prevPageImage = GameObject.Find("prevPage").GetComponent<Image>();
         nextPageImage = GameObject.Find("nextPage").GetComponent<Image>();
@@ -50,10 +51,9 @@ public class LevelSelectManager : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        currentLevelNumber = 1;
-
+        databucket.level = Mathf.Clamp(databucket.level, 1, Mathf.Min(23, databucket.levelsCleared + 1));
         maxLevel = 23;
-        mediumFirstLevel = 8;
+        mediumFirstLevel = 6;
         hardFirstLevel = 16;
 
         ResetVisuals();
@@ -76,7 +76,11 @@ public class LevelSelectManager : MonoBehaviour {
         //currAnim.SetTrigger("turnToNextPage");
         //nextAnim.SetTrigger("turnToNextPage");
         //prevAnim.SetTrigger("turnToNextPage");
-        currentLevelNumber++;
+        databucket.level++;
+        //if (databucket.level > databucket.levelsCleared)
+        //{
+        //    databucket.levelsCleared++;
+        //}
         ResetVisuals();
           
     }
@@ -87,7 +91,7 @@ public class LevelSelectManager : MonoBehaviour {
         //nextAnim.SetTrigger("turnToPrevPage");
         //prevAnim.SetTrigger("turnToPrevPage");
         Debug.Log("animating previous page");
-        currentLevelNumber--;
+        databucket.level--;
         ResetVisuals();
         Debug.Log("animating previous page");
 
@@ -98,30 +102,30 @@ public class LevelSelectManager : MonoBehaviour {
         switch (difficulty)
         {
             case "easy":
-                currentLevelNumber = 1;
+                databucket.level = 1;
                 ResetVisuals();
                 return;
 
             case "medium":
-                if (mediumFirstLevel > databucket.levelsCleared)
+                if (mediumFirstLevel > databucket.levelsCleared + 1)
                 {
                     return;
                 }
                 else
                 {
-                    currentLevelNumber = mediumFirstLevel;
+                    databucket.level = mediumFirstLevel;
                     ResetVisuals();
                     return;
                 }
 
             case "hard":
-                if (hardFirstLevel > databucket.levelsCleared)
+                if (hardFirstLevel > databucket.levelsCleared + 1)
                 {
                     return;
                 }
                 else
                 {
-                    currentLevelNumber = hardFirstLevel;
+                    databucket.level = hardFirstLevel;
                     ResetVisuals();
                     return;
                 }
@@ -138,22 +142,22 @@ public class LevelSelectManager : MonoBehaviour {
 
     private void ResetText()
     {
-        currText.text = document.ParseDocument(currentLevelNumber);
-        if (currentLevelNumber == 1)
+        currText.text = document.ParseDocument(databucket.level);
+        if (databucket.level == 1)
         {
             prevText.text = "";
-            nextText.text = document.ParseDocument(currentLevelNumber + 1);
+            nextText.text = document.ParseDocument(databucket.level + 1);
 
         }
-        else if (currentLevelNumber == maxLevel)
+        else if (databucket.level == maxLevel)
         {
-            prevText.text = document.ParseDocument(currentLevelNumber - 1);
+            prevText.text = document.ParseDocument(databucket.level - 1);
             nextText.text = "";
         }
         else
         {
-            prevText.text = document.ParseDocument(currentLevelNumber - 1);
-            nextText.text = document.ParseDocument(currentLevelNumber + 1);
+            prevText.text = document.ParseDocument(databucket.level - 1);
+            nextText.text = document.ParseDocument(databucket.level + 1);
         }
 
 
@@ -161,14 +165,14 @@ public class LevelSelectManager : MonoBehaviour {
 
     private void ResetPagesAndButtons()
     {
-        if (currentLevelNumber == 1)
+        if (databucket.level == 1)
         {
             prevPageImage.enabled = false;
             prevButtonImage.enabled = false;
             prevButton.enabled = false;
             prevButtonText.enabled = false;
         }
-        else if (currentLevelNumber == maxLevel)
+        else if (databucket.level == maxLevel)
         {
             nextPageImage.enabled = false;
             nextButtonImage.enabled = false;
@@ -188,7 +192,7 @@ public class LevelSelectManager : MonoBehaviour {
             nextButtonText.enabled = true;
         }
 
-        if (currentLevelNumber == databucket.levelsCleared)
+        if (databucket.level >= databucket.levelsCleared + 1)
         {
             nextLockImage.enabled = true;
             nextButton.enabled = false;
@@ -199,7 +203,7 @@ public class LevelSelectManager : MonoBehaviour {
             nextButton.enabled = true;
         }
 
-        if (databucket.levelsCleared < mediumFirstLevel)
+        if (databucket.levelsCleared + 1 < mediumFirstLevel)
         {
             mediumLockImage.enabled = true;
         }
@@ -208,7 +212,7 @@ public class LevelSelectManager : MonoBehaviour {
             mediumLockImage.enabled = false;
         }
 
-        if (databucket.levelsCleared < hardFirstLevel)
+        if (databucket.levelsCleared  + 1< hardFirstLevel)
         {
             hardLockImage.enabled = true;
         }
@@ -216,5 +220,15 @@ public class LevelSelectManager : MonoBehaviour {
         {
             hardLockImage.enabled = false;
         }
+
+        string difficulty;
+        if (databucket.level < mediumFirstLevel)
+            difficulty = "Easy";
+        else if (databucket.level < hardFirstLevel)
+            difficulty = "Stressful";
+        else difficulty = "Doom";
+
+        levelInfo.text = "Page " + databucket.level + ", " + difficulty +
+            "\nClear Requirement: " + databucket.levelData.data[databucket.level].clearPercent * 100f + "%";
     }
 }

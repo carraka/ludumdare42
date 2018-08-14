@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class Glitch : MonoBehaviour {
 
     private int HP;
+    private int MaxHP;
 
     private GlitchType type;
     private Vector3 location;
@@ -24,6 +25,7 @@ public class Glitch : MonoBehaviour {
     private Vector3 looperCenter;
     private float looperRotation;
     private float looperRotationalSpeed;
+    private bool momSpawned;
 
     private bool clockwise;
 
@@ -39,9 +41,11 @@ public class Glitch : MonoBehaviour {
         type = gType;
         location = loc;
         movementSpeed = mSpeed;
+        MaxHP = health;
         HP = health;
         document = doc;
         scannerCurrentRow = 99999;
+        animationStart = Time.time;
 
 
 
@@ -87,24 +91,71 @@ public class Glitch : MonoBehaviour {
 
         if (state == GlitchState.action)
         {
-            if ((location - destination).magnitude < movementSpeed)
+            if (type == GlitchType.mom)
             {
-                location = destination;
-                GetComponent<RectTransform>().localPosition = location;
-                document.spaces[spaceToReplace] = document.FillSpace(document.spaces[spaceToReplace]);
+                if (Time.time >= animationStart + .5f && momSpawned == false)
+                {
+                    momSpawned = true;
+                    GameObject newGlitch;
+                    Vector3 spawnLocation = location;
+                    spawnLocation.y += 25f;
+                    Transform monitorTransform = GameObject.Find("Monitor").transform;
+
+                    document.PlaySFX(GlitchSFX.birth);
+
+                    switch (Random.Range(0, 4))
+                    {
+                        case 0:
+                            spawnLocation.y -= 75f;
+                            newGlitch = Instantiate((GameObject)Resources.Load("Prefabs/Looper", typeof(GameObject)), monitorTransform);
+                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.looper, spawnLocation, movementSpeed, document);
+                            break;
+                       case 1:
+                            newGlitch = Instantiate((GameObject)Resources.Load("Prefabs/Dasher", typeof(GameObject)), monitorTransform);
+                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.dasher, spawnLocation, movementSpeed, document);
+                            break;
+                        case 3:
+                            newGlitch = Instantiate((GameObject)Resources.Load("Prefabs/Eratic", typeof(GameObject)), monitorTransform);
+                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.eratic, spawnLocation, movementSpeed, document);
+                            break;
+                        default:
+                            newGlitch = Instantiate((GameObject)Resources.Load("Prefabs/Scanner", typeof(GameObject)), monitorTransform);
+                            newGlitch.GetComponent<Glitch>().Initiate(GlitchType.scanner, spawnLocation, movementSpeed, document);
+                            break;
+
+
+                    }
+
+                }
+                else if(Time.time >= animationStart + 1f)
+                {
+                    state = GlitchState.moving;
+                    animationStart = Time.time;
+                    animator.SetBool("Birthing", false);
+                    
+                }
             }
             else
             {
-                location += (destination - location).normalized * movementSpeed;
-                GetComponent<RectTransform>().localPosition = location;
-            }
-            if (Time.time >= animationStart + 1f)
-            {
-                animator.SetBool("Letter", false);
-                state = GlitchState.moving;
+                if ((location - destination).magnitude < movementSpeed)
+                {
+                    location = destination;
+                    GetComponent<RectTransform>().localPosition = location;
+                    document.spaces[spaceToReplace] = document.FillSpace(document.spaces[spaceToReplace]);
+                }
+                else
+                {
+                    location += (destination - location).normalized * movementSpeed;
+                    GetComponent<RectTransform>().localPosition = location;
+                }
+                if (Time.time >= animationStart + 1f)
+                {
+                    animator.SetBool("Letter", false);
+                    state = GlitchState.moving;
 
-                if (type == GlitchType.dasher || type == GlitchType.eratic)
-                    newDestination();
+                    if (type == GlitchType.dasher || type == GlitchType.eratic)
+                        newDestination();
+                }
             }
 
             return;
@@ -134,6 +185,16 @@ public class Glitch : MonoBehaviour {
                         DropLetter(x);
                         return;
                     }
+                }
+            }
+            else if (type == GlitchType.mom)
+            {
+                if(Time.time >= animationStart + 5f)
+                {
+                    state = GlitchState.action;
+                    animationStart = Time.time;
+                    animator.SetBool("Birthing", true);
+                    momSpawned = false;
                 }
             }
             else
@@ -187,6 +248,16 @@ public class Glitch : MonoBehaviour {
                 }
             }
         }
+
+        if(state == GlitchState.hit)
+        {
+            animator.SetBool("Hit", false);
+            if (Time.time > animationStart + .5f)
+            {
+                state = GlitchState.moving;
+                animationStart = Time.time;
+            }
+        }
     }
 
     private void DropLetter(int index)
@@ -229,7 +300,12 @@ public class Glitch : MonoBehaviour {
             case GlitchType.scanner:
                 if(scannerCurrentRow >= document.lineStart.Count)
                 {
-                    scannerCurrentRow = 0;
+                    if (scannerCurrentRow == document.lineStart.Count)
+                        scannerCurrentRow = 0;
+                    else
+                        scannerCurrentRow = Random.Range(0, document.lineStart.Count / 2) * 2;
+                    if (location.x < document.monitorLeft)
+                        location.y = document.RowHeight(scannerCurrentRow);
                     destination = new Vector3(document.documentLeft - 25, document.RowHeight(scannerCurrentRow));
                 }
                 else if(scannerCurrentRow % 2 == 0) //moving right on even rows
@@ -261,6 +337,49 @@ public class Glitch : MonoBehaviour {
 
                 destination.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
                 break;
+            case GlitchType.mom:
+                destination.x = Random.Range(document.documentLeft, document.documentRight);
+                destination.y = Random.Range(document.documentTop, document.documentBottom);
+
+                destination = location + (destination - location).normalized * Random.Range(1f, 3f) / Time.deltaTime * movementSpeed;
+
+                /*                if (location.y > document.monitorTop)
+                                    destination.y = document.monitorTop - 50;
+                                if (location.y < document.monitorBottom)
+                                    destination.y = document.monitorBottom + 50;
+                                if (location.x < document.monitorLeft)
+                                    destination.x = document.monitorLeft + 50;
+                                if (location.x > document.monitorRight)
+                                    destination.x = document.monitorRight - 50;
+
+                                if (destination == location)
+                                {
+
+                                    if (clockwise)
+                                    {
+                                        if (location.y >= document.monitorTop - 51 && location.x < document.monitorRight - 50)
+                                            destination = new Vector3(document.monitorTop - 50, document.monitorRight - 50);
+                                        if (location.x >= document.monitorRight - 51 && location.y > document.monitorBottom + 50)
+                                            destination = new Vector3(document.monitorRight - 50, document.monitorBottom + 50);
+                                        if (location.y <= document.monitorBottom + 51 && location.x > document.monitorLeft + 50)
+                                            destination = new Vector3(document.monitorBottom + 50, document.monitorLeft + 50);
+                                        if (location.x <= document.monitorLeft + 51 && location.y < document.monitorTop - 51)
+                                            destination = new Vector3(document.monitorLeft + 50, document.monitorTop - 50);
+                                    }
+                                    else
+                                    {
+                                        if (location.y >= document.monitorTop - 51 && location.x > document.monitorLeft + 50)
+                                            destination = new Vector3(document.monitorTop - 50, document.monitorLeft + 50);
+                                        if (location.x <= document.monitorLeft + 51 && location.y > document.monitorBottom + 50)
+                                            destination = new Vector3(document.monitorLeft + 50, document.monitorBottom + 50);
+                                        if (location.y <= document.monitorBottom + 51 && location.x < document.monitorRight - 50)
+                                            destination = new Vector3(document.monitorBottom, document.monitorRight - 50);
+                                        if (location.x >= document.monitorRight - 51 && location.y < document.monitorTop - 51)
+                                            destination = new Vector3(document.monitorRight - 50, document.monitorTop - 50);
+
+                                    }
+        }*/
+                break;
             default:
                 destination = Vector3.zero;
                 break;
@@ -278,7 +397,11 @@ public class Glitch : MonoBehaviour {
         }
         else
         {
+            animator.SetBool("Hit", true);
+            animator.SetFloat("Health", (float)HP / MaxHP);
             document.PlaySFX(GlitchSFX.hit);
+            state = GlitchState.hit;
+            animationStart = Time.time;
         }
     }
 
@@ -293,4 +416,4 @@ public class Glitch : MonoBehaviour {
 }
 
 public enum GlitchType { dasher, scanner, looper, eratic, mom}
-public enum GlitchState { moving, action, dying}
+public enum GlitchState { moving, action, hit, dying}

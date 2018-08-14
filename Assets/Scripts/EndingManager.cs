@@ -26,6 +26,9 @@ public class EndingManager : MonoBehaviour {
                 //audio.PlayOneShot((AudioClip)Resources.Load("Music/ld41_ending_chicken"));
                 illustration.sprite = Resources.Load<Sprite>("Sprites/Endings/badend_clean");
                 textbox.sprite = Resources.Load<Sprite>("Sprites/Endings/gameover");
+                Vector2 top = endingText.GetComponent<RectTransform>().offsetMax;
+                top.y = -20;
+                endingText.GetComponent<RectTransform>().offsetMax = top;
                 endingText.text = "You ran out of spaces! The glitches have invaded your manuscript, delaying the publication date by weeks! Not that you were around to see it. The bestselling machine will churn on without you.";
                 break;
 
@@ -37,6 +40,8 @@ public class EndingManager : MonoBehaviour {
                 endingText.text = "You saved the spaces! The book you edited catapults to the top of the bestseller list, and your job is secure. If only you had had time to do a proper edit. Not that it would have helped the story much ...";
                 break;
         }
+
+        databucket.endingCode = "";
     }
 	
 	// Update is called once per frame

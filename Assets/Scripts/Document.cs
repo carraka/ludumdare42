@@ -14,6 +14,7 @@ public class Document : MonoBehaviour {
     private AudioSource SFX;
 
     private List<AudioClip> keys;
+    private List<AudioClip> meows;
     AudioClip glitchLetter;
     AudioClip glitchDeath;
     AudioClip glitchHit;
@@ -35,11 +36,11 @@ public class Document : MonoBehaviour {
     public float documentRight { get; private set; }
     public float documentBottom { get; private set; }
 
+    private Image paw;
+
     private void Awake()
     {
         documentText = GetComponent<Text>();
-        db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
-        SFX = GameObject.Find("SFX").GetComponent<AudioSource>();
 
         keys = new List<AudioClip>();
 
@@ -50,19 +51,28 @@ public class Document : MonoBehaviour {
         keys.Add((AudioClip)Resources.Load("SFX/Keys/Key5", typeof(AudioClip)));
         keys.Add((AudioClip)Resources.Load("SFX/Keys/Key6", typeof(AudioClip)));
 
+        meows = new List<AudioClip>();
+
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow1", typeof(AudioClip)));
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow2", typeof(AudioClip)));
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow3", typeof(AudioClip)));
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow4", typeof(AudioClip)));
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow5", typeof(AudioClip)));
+        meows.Add((AudioClip)Resources.Load("SFX/meows/LaCatMeow6", typeof(AudioClip)));
+
         glitchLetter = (AudioClip)Resources.Load("SFX/glitch-alter", typeof(AudioClip));
         glitchDeath = (AudioClip)Resources.Load("SFX/glitch-death", typeof(AudioClip));
         glitchHit = (AudioClip)Resources.Load("SFX/glitch-hit", typeof(AudioClip));
         glitchBirth = (AudioClip)Resources.Load("SFX/glitch-birth", typeof(AudioClip));
-
-
-
     }
 
     public bool SetUpDocument(int level)
     {
+        paw = GameObject.Find("Kitty").GetComponent<Image>();
+        db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
+        SFX = GameObject.Find("SFX").GetComponent<AudioSource>();
 
-        
+
         string text = ParseDocument(level);
         Font font = documentText.font;
 
@@ -94,9 +104,9 @@ public class Document : MonoBehaviour {
         documentTop = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) * (documentRect.anchorMax.y - 0.5f);
         documentBottom = Camera.main.pixelWidth * 0.75f * (monitorRect.anchorMax.y - monitorRect.anchorMin.y) * (documentRect.anchorMin.y - 0.5f);
 
-        Debug.Log("Document size: " + width + " x " + height);
-        Debug.Log("Monitor Left: " + monitorLeft + ", Top: " + monitorTop + ", Right: " + monitorRight + ", Bottom: " + monitorBottom);
-        Debug.Log("Document Left: " + documentLeft + ", Top: " + documentTop + ", Right: " + documentRight + ", Bottom: " + documentBottom);
+        //Debug.Log("Document size: " + width + " x " + height);
+        //Debug.Log("Monitor Left: " + monitorLeft + ", Top: " + monitorTop + ", Right: " + monitorRight + ", Bottom: " + monitorBottom);
+        //Debug.Log("Document Left: " + documentLeft + ", Top: " + documentTop + ", Right: " + documentRight + ", Bottom: " + documentBottom);
 
         bool working = true;
         int fontSize = 60;
@@ -236,8 +246,9 @@ public class Document : MonoBehaviour {
 
     public string ParseDocument(int level)
     {
-        StreamReader reader = new StreamReader("Assets/Resources/epci.txt");
-        string text = reader.ReadToEnd();
+        TextAsset textFile = Resources.Load("epci") as TextAsset;
+        //Debug.Log("Loaded text asset ");
+        string text = textFile.text;
 
         int startOfText = text.IndexOf("[" + level + "]");
         int endOfText = text.IndexOf("[" + (level + 1) + "]");
@@ -329,18 +340,27 @@ public class Document : MonoBehaviour {
 
     public int GetEmptySpace()
     {
-        if (CountOpenSpaces() == 0)
+        int count = CountOpenSpaces();
+        if (count == 0)
         {
             return Random.Range(0, spaces.Count - 1);
         }
         else
         {
-            int rand;
-            do
+            int slot = Random.Range(0, count) + 1;
+            count = 0;
+            for (int x = 0; x < spaces.Count; x++)
             {
-                rand = Random.Range(0, spaces.Count - 1);
-            } while (spaces[rand].currentChar != ' ');
-            return rand;
+                if (spaces[x].currentChar == ' ')
+                {
+                    count++;
+                    if (count == slot)
+                        return x;
+                }
+            }
+
+            Debug.Log("Did not find desired space, returning a random one");
+            return Random.Range(0, spaces.Count - 1);
         }
         //Debug.Log("Int space " + spaces[rand].location + " Monitor Space: " + spaces[rand].monitorLocation);
     }
@@ -386,6 +406,14 @@ public class Document : MonoBehaviour {
         }
 
         SFX.PlayOneShot(sound);
+
+    }
+
+    public void Meow()
+    {
+        SFX.PlayOneShot(meows[Random.Range(0,6)]);
+        paw.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+
 
     }
 }

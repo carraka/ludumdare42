@@ -55,6 +55,10 @@ public class GameLoop : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
+    }
+
+    private void Start()
+    {
         cursor = GetComponentInChildren<CursorController>();
         db = GameObject.Find("DataBucket").GetComponent<DataBucket>();
         document = GetComponentInChildren<Document>();
@@ -71,10 +75,7 @@ public class GameLoop : MonoBehaviour {
         m_Raycaster = GameObject.Find("BGCanvas").GetComponent<GraphicRaycaster>();
         //Fetch the Event System from the Scene
         m_EventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
-    }
 
-    private void Start()
-    {
         document.SetUpDocument(db.level);
 
         GUIStyle style = new GUIStyle();
@@ -103,20 +104,27 @@ public class GameLoop : MonoBehaviour {
         if (db.levelData.data[db.level].difficulty == Difficulty.easy)
         {
             cursor.GetComponent<Image>().enabled = false;
+            cursor.GetComponentInChildren<Text>().enabled = false;
         }
 
         AudioClip music = null;
-        switch (Random.Range(0, 2))
+
+        switch (Random.Range(0, 3))
         {
             case 0:
                 music = (AudioClip)Resources.Load("Music/game theme 1 fixed-ld42", typeof(AudioClip));
                 break;
             case 1:
-                music = (AudioClip)Resources.Load("Music/game music 2 loop - ld42", typeof(AudioClip));
+                music = (AudioClip)Resources.Load("Music/game music 2 loop-ld42", typeof(AudioClip));
+                break;
+            default:
+                music = (AudioClip)Resources.Load("Music/game_music_3", typeof(AudioClip));
                 break;
 
         }
-        BGM.PlayOneShot(music);
+
+        BGM.clip = music;
+        BGM.Play();
         BGM.loop = true;
 
         playingLevel = false;
@@ -198,6 +206,8 @@ public class GameLoop : MonoBehaviour {
         if (db.levelData.data[db.level].bigWaves > 0)
             nextBigWave = levelStartTime + db.levelData.data[db.level].bigTimeBetweenWaves;
         else nextBigWave = Mathf.Infinity;
+
+        nextSurge = Mathf.Infinity;
     }
 
 
@@ -258,18 +268,18 @@ public class GameLoop : MonoBehaviour {
         for (float t = Mathf.PI / 2; t > -Mathf.PI / 2; t -= .01f)
         {
             Vector3 pos = timeUp.GetComponent<RectTransform>().localPosition;
-            pos.x = 1600 * Mathf.Sin(t) * Mathf.Abs(Mathf.Sin(t));
+            pos.x = 1200 * Mathf.Sin(t) * Mathf.Abs(Mathf.Sin(t));
             timeUp.GetComponent<RectTransform>().localPosition = pos;
             yield return null;
 
         }
         GameObject anyKey = GameObject.Find("anyKey");
 
-        for (float x = 1230; x > 230; x -= 20)
+        for (float x = 1000; x > 0; x -= 20)
         {
-            Vector3 pos = anyKey.GetComponent<RectTransform>().localPosition;
+            Vector3 pos = anyKey.GetComponent<RectTransform>().anchoredPosition;
             pos.x = x;
-            anyKey.GetComponent<RectTransform>().localPosition = pos;
+            anyKey.GetComponent<RectTransform>().anchoredPosition = pos;
             yield return null;
         }
 
@@ -285,7 +295,7 @@ public class GameLoop : MonoBehaviour {
         db.spacesSaved = document.CountOpenSpaces();
         db.levelSpaces = document.spaces.Count;
         db.errorsMade = errorCount;
-        SceneManager.LoadScene("feedback");
+        LoadFeedback();
 
     }
 
@@ -424,7 +434,7 @@ public class GameLoop : MonoBehaviour {
         {
             for (int x = 0; x < db.levelData.data[db.level].bigWaveUnitsPerSurge; x++)
             {
-                if (Random.Range(0f, 1f) < db.levelData.data[db.level].bigWaveMomChance && momSpawned)
+                if (Random.Range(0f, 1f) < db.levelData.data[db.level].bigWaveMomChance && momSpawned == false)
                 {
                     SpawnMom();
                     momSpawned = true;
@@ -510,25 +520,19 @@ public class GameLoop : MonoBehaviour {
     private void SpawnMom()
     {
         Vector2 spawnLocation;
-        int rand = Random.Range(0, 4);
-        switch (rand)
-        {
-            case 0:
-                spawnLocation = new Vector2(501, 460);
-                break;
-            case 1:
-                spawnLocation = new Vector2(601, -360);
-                break;
-            case 2:
-                spawnLocation = new Vector2(-501, -460);
-                break;
-            default:
-                spawnLocation = new Vector2(-601, 360);
-                break;
 
-        }
+        float startPos = Random.Range(0f, (document.monitorTop + document.monitorRight + 100) * 2.0f);
+
+        if (startPos < document.monitorRight * 2.0f + 100)
+            spawnLocation = new Vector2(startPos - document.monitorRight - 50, document.monitorTop + 50);
+        else
+            spawnLocation = new Vector2(document.monitorRight + 50, startPos - (document.monitorRight * 2.0f + 100) - document.monitorTop - 50);
+
+        if (Random.Range(0, 2) == 1)
+            spawnLocation *= -1;
+
         GameObject newGlitch = Instantiate(momPrefab, monitorTransform);
-        newGlitch.GetComponent<Glitch>().Initiate(GlitchType.mom, new Vector2(0, 0), db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>(), db.levelData.data[db.level].MomHP);
+        newGlitch.GetComponent<Glitch>().Initiate(GlitchType.mom, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>(), db.levelData.data[db.level].MomHP);
 
 
     }
@@ -556,5 +560,10 @@ public class GameLoop : MonoBehaviour {
     public void ToLevelSelect()
     {
         SceneManager.LoadScene("levelselect");
+    }
+
+    public void LoadFeedback()
+    {
+        SceneManager.LoadScene("feedback");
     }
 }

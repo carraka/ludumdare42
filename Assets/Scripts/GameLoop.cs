@@ -144,7 +144,11 @@ public class GameLoop : MonoBehaviour {
         db.glitchesKilled = 0;
 
         clock.text = secondsToClock(db.levelData.data[db.level].levelDuration);
-        spaceCounter.text = "Spaces " + document.CountOpenSpaces() + "/" + document.spaces.Count;
+
+        int count = document.CountOpenSpaces();
+
+        spaceCounter.text = "Spaces " + count + "/" + document.spaces.Count;
+        GameObject.Find("pageText").GetComponent<Text>().text = "Page " + db.level + ", Clear Requirement: " + Mathf.FloorToInt(100f * db.levelData.data[db.level].clearPercent) + "%";
 
         momPrefab = (GameObject) Resources.Load("Prefabs/Mom", typeof(GameObject));
         looperPrefab = (GameObject)Resources.Load("Prefabs/Looper", typeof(GameObject));
@@ -328,11 +332,11 @@ public class GameLoop : MonoBehaviour {
         }
         GameObject buttons = GameObject.Find("buttonAnchor");
 
-        for (int y = -600; y <=-150; y += 20)
+        for (int y = -50; y <=75; y += 5)
         {
-            Vector3 pos = buttons.GetComponent<RectTransform>().localPosition;
+            Vector3 pos = buttons.GetComponent<RectTransform>().anchoredPosition;
             pos.y = y;
-            buttons.GetComponent<RectTransform>().localPosition = pos;
+            buttons.GetComponent<RectTransform>().anchoredPosition = pos;
             yield return null;
         }
     }

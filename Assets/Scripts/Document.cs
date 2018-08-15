@@ -6,7 +6,7 @@ using System.IO;
 
 public class Document : MonoBehaviour {
 
-    public List<int> lineStart;
+    public List<int> lineStart { get; private set; }
     public List<Space> spaces;
 
     public Text documentText { get;  private set; }

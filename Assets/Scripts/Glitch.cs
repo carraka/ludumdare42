@@ -62,15 +62,16 @@ public class Glitch : MonoBehaviour {
             looperCenter = loc;
             looperRotationalSpeed = Mathf.PI / 100f * movementSpeed;
 
-            if (Random.Range(0, 2) == 0)
-            {
-                location = looperCenter + new Vector3(0, 100);
-                looperRotation = 0;
-            }
-            else
+            
+            if ((loc.x < document.monitorLeft || loc.x > document.monitorRight) && Random.Range(0, 2) == 0)
             {
                 location = looperCenter + new Vector3(0, -100);
                 looperRotation = Mathf.PI;
+            }
+            else
+            {
+                location = looperCenter + new Vector3(0, 100);
+                looperRotation = 0;
             }
             
         }
@@ -93,7 +94,7 @@ public class Glitch : MonoBehaviour {
         {
             if (type == GlitchType.mom)
             {
-                if (Time.time >= animationStart + .5f && momSpawned == false)
+                if (Time.time >= animationStart + .6f && momSpawned == false)
                 {
                     momSpawned = true;
                     GameObject newGlitch;
@@ -251,9 +252,10 @@ public class Glitch : MonoBehaviour {
 
         if(state == GlitchState.hit)
         {
-            animator.SetBool("Hit", false);
+            
             if (Time.time > animationStart + .5f)
             {
+                animator.SetBool("Hit", false);
                 state = GlitchState.moving;
                 animationStart = Time.time;
             }
@@ -338,47 +340,50 @@ public class Glitch : MonoBehaviour {
                 destination.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
                 break;
             case GlitchType.mom:
-                destination.x = Random.Range(document.documentLeft, document.documentRight);
-                destination.y = Random.Range(document.documentTop, document.documentBottom);
+                //destination.x = Random.Range(document.documentLeft, document.documentRight);
+                //destination.y = Random.Range(document.documentTop, document.documentBottom);
 
-                destination = location + (destination - location).normalized * Random.Range(1f, 3f) / Time.deltaTime * movementSpeed;
+                //destination = location + (destination - location).normalized * Random.Range(1f, 3f) / Time.deltaTime * movementSpeed;
 
-                /*                if (location.y > document.monitorTop)
-                                    destination.y = document.monitorTop - 50;
-                                if (location.y < document.monitorBottom)
-                                    destination.y = document.monitorBottom + 50;
-                                if (location.x < document.monitorLeft)
-                                    destination.x = document.monitorLeft + 50;
-                                if (location.x > document.monitorRight)
-                                    destination.x = document.monitorRight - 50;
+                destination = location;
 
-                                if (destination == location)
-                                {
+                if (location.y > document.monitorTop)
+                    destination.y = document.monitorTop - 50;
+                if (location.y < document.monitorBottom)
+                    destination.y = document.monitorBottom + 50;
+                if (location.x < document.monitorLeft)
+                    destination.x = document.monitorLeft + 50;
+                if (location.x > document.monitorRight)
+                    destination.x = document.monitorRight - 50;
 
-                                    if (clockwise)
-                                    {
-                                        if (location.y >= document.monitorTop - 51 && location.x < document.monitorRight - 50)
-                                            destination = new Vector3(document.monitorTop - 50, document.monitorRight - 50);
-                                        if (location.x >= document.monitorRight - 51 && location.y > document.monitorBottom + 50)
-                                            destination = new Vector3(document.monitorRight - 50, document.monitorBottom + 50);
-                                        if (location.y <= document.monitorBottom + 51 && location.x > document.monitorLeft + 50)
-                                            destination = new Vector3(document.monitorBottom + 50, document.monitorLeft + 50);
-                                        if (location.x <= document.monitorLeft + 51 && location.y < document.monitorTop - 51)
-                                            destination = new Vector3(document.monitorLeft + 50, document.monitorTop - 50);
-                                    }
-                                    else
-                                    {
-                                        if (location.y >= document.monitorTop - 51 && location.x > document.monitorLeft + 50)
-                                            destination = new Vector3(document.monitorTop - 50, document.monitorLeft + 50);
-                                        if (location.x <= document.monitorLeft + 51 && location.y > document.monitorBottom + 50)
-                                            destination = new Vector3(document.monitorLeft + 50, document.monitorBottom + 50);
-                                        if (location.y <= document.monitorBottom + 51 && location.x < document.monitorRight - 50)
-                                            destination = new Vector3(document.monitorBottom, document.monitorRight - 50);
-                                        if (location.x >= document.monitorRight - 51 && location.y < document.monitorTop - 51)
-                                            destination = new Vector3(document.monitorRight - 50, document.monitorTop - 50);
+                if (destination == location)
+                {
+                    //destination = Vector3.zero;
 
-                                    }
-        }*/
+                    if (clockwise)
+                    {
+                        if (location.y >= document.monitorTop - 60 && location.x < document.monitorRight - 50)
+                            destination = new Vector3(document.monitorRight - 50, document.monitorTop - 50);
+                        if (location.x >= document.monitorRight - 60 && location.y > document.monitorBottom + 50)
+                            destination = new Vector3(document.monitorRight - 50, document.monitorBottom + 50);
+                        if (location.y <= document.monitorBottom + 60 && location.x > document.monitorLeft + 50)
+                            destination = new Vector3(document.monitorLeft + 50, document.monitorBottom + 50);
+                        if (location.x <= document.monitorLeft + 60 && location.y < document.monitorTop - 50)
+                            destination = new Vector3(document.monitorLeft + 50, document.monitorTop - 50);
+                    }
+                    else
+                    {
+                        if (location.y >= document.monitorTop - 60 && location.x > document.monitorLeft + 50)
+                            destination = new Vector3(document.monitorLeft + 50, document.monitorTop - 50);
+                        if (location.x <= document.monitorLeft + 60 && location.y > document.monitorBottom + 50)
+                            destination = new Vector3(document.monitorLeft + 50, document.monitorBottom + 50);
+                        if (location.y <= document.monitorBottom + 60 && location.x < document.monitorRight - 50)
+                            destination = new Vector3(document.monitorRight - 50, document.monitorBottom + 50);
+                        if (location.x >= document.monitorRight - 60 && location.y < document.monitorTop - 51)
+                            destination = new Vector3(document.monitorRight - 50, document.monitorTop - 50);
+
+                    }
+                }
                 break;
             default:
                 destination = Vector3.zero;

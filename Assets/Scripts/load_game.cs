@@ -18,22 +18,13 @@ public class load_game : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Awake(){
+
+    void Start () {
         //buttonSound = GameObject.Find ("ButtonSound").GetComponent<AudioSource> ();
         databucket = GameObject.Find("DataBucket").GetComponent<DataBucket>();
 
     }
-
-    void Start () {
-
 	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     public void LoadLevelSelect()
     {
         if (databucket.GetComponent<AudioSource>().isPlaying == false)

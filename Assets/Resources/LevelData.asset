@@ -173,21 +173,21 @@ MonoBehaviour:
     bigWaveUnitsPerSurge: 1
     bigWaveMomChance: 0.5
   - difficulty: 1
-    MomHP: 5
+    MomHP: 10
     glitchSpeed: 1.2
     levelDuration: 60
     percentInitialSpacesFilled: 0.9
     clearPercent: 0.3
-    smallWaves: 0
-    smallTimeBetweenWaves: 0
-    smallUnitsPerWave: 0
-    smallMomChance: 0
-    bigWaves: 2
-    bigTimeBetweenWaves: 20
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 1
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
+    smallWaves: 3
+    smallTimeBetweenWaves: 20
+    smallUnitsPerWave: 1
+    smallMomChance: 1
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
   - difficulty: 1
     MomHP: 5
     glitchSpeed: 1.5

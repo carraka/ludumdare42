@@ -296,9 +296,6 @@ public class GameLoop : MonoBehaviour {
             yield return null;
         } while (Input.anyKeyDown == false);
 
-        db.spacesSaved = document.CountOpenSpaces();
-        db.levelSpaces = document.spaces.Count;
-        db.errorsMade = errorCount;
         LoadFeedback();
 
     }
@@ -568,6 +565,9 @@ public class GameLoop : MonoBehaviour {
 
     public void LoadFeedback()
     {
+        db.spacesSaved = document.CountOpenSpaces();
+        db.levelSpaces = document.spaces.Count;
+        db.errorsMade = errorCount;
         SceneManager.LoadScene("feedback");
     }
 }

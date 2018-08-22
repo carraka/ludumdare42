@@ -76,6 +76,9 @@ public class TutorialManager : MonoBehaviour {
             case 8:
                 StartCoroutine("LastSlide");
                 return;
+            case 9:
+                slideNumber--;
+                return;
             case 11:
                 db.level = 6;
                 SceneManager.LoadScene("playlevel");

@@ -149,7 +149,7 @@ public class load_game : MonoBehaviour {
 
     public void RestartLevel()
     {
-        databucket.level--;
+        //databucket.level--;
         SceneManager.LoadScene("playlevel");
     }
 

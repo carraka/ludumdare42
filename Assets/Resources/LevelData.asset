@@ -34,8 +34,8 @@ MonoBehaviour:
     levelDuration: 30
     percentInitialSpacesFilled: 0.1
     clearPercent: 0.1
-    smallWaves: 10
-    smallTimeBetweenWaves: 3
+    smallWaves: 6
+    smallTimeBetweenWaves: 5
     smallUnitsPerWave: 1
     smallMomChance: 0
     bigWaves: 0
@@ -50,24 +50,8 @@ MonoBehaviour:
     levelDuration: 30
     percentInitialSpacesFilled: 0.2
     clearPercent: 0.2
-    smallWaves: 15
-    smallTimeBetweenWaves: 2
-    smallUnitsPerWave: 1
-    smallMomChance: 0
-    bigWaves: 0
-    bigTimeBetweenWaves: 0
-    bigWaveSurges: 0
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 0
-    bigWaveMomChance: 0
-  - difficulty: 0
-    MomHP: 0
-    glitchSpeed: 1.2
-    levelDuration: 30
-    percentInitialSpacesFilled: 0.2
-    clearPercent: 0.3
-    smallWaves: 10
-    smallTimeBetweenWaves: 3
+    smallWaves: 3
+    smallTimeBetweenWaves: 10
     smallUnitsPerWave: 2
     smallMomChance: 0
     bigWaves: 0
@@ -82,8 +66,8 @@ MonoBehaviour:
     levelDuration: 30
     percentInitialSpacesFilled: 0.2
     clearPercent: 0.3
-    smallWaves: 15
-    smallTimeBetweenWaves: 2
+    smallWaves: 3
+    smallTimeBetweenWaves: 10
     smallUnitsPerWave: 2
     smallMomChance: 0
     bigWaves: 0
@@ -98,90 +82,58 @@ MonoBehaviour:
     levelDuration: 30
     percentInitialSpacesFilled: 0.2
     clearPercent: 0.4
-    smallWaves: 10
-    smallTimeBetweenWaves: 3
+    smallWaves: 6
+    smallTimeBetweenWaves: 5
+    smallUnitsPerWave: 1
+    smallMomChance: 0
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
+  - difficulty: 0
+    MomHP: 3
+    glitchSpeed: 1.2
+    levelDuration: 30
+    percentInitialSpacesFilled: 0.2
+    clearPercent: 0.5
+    smallWaves: 6
+    smallTimeBetweenWaves: 5
     smallUnitsPerWave: 1
     smallMomChance: 0
     bigWaves: 2
     bigTimeBetweenWaves: 10
     bigWaveSurges: 1
     bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 5
-    bigWaveMomChance: 0
+    bigWaveUnitsPerSurge: 3
+    bigWaveMomChance: 1
   - difficulty: 1
     MomHP: 3
     glitchSpeed: 1
     levelDuration: 60
     percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 15
-    smallTimeBetweenWaves: 4
+    clearPercent: 0.9
+    smallWaves: 6
+    smallTimeBetweenWaves: 10
     smallUnitsPerWave: 1
     smallMomChance: 0
-    bigWaves: 1
-    bigTimeBetweenWaves: 30
-    bigWaveSurges: 1
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
     bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
   - difficulty: 1
     MomHP: 3
     glitchSpeed: 1.1
     levelDuration: 60
     percentInitialSpacesFilled: 0.4
-    clearPercent: 0.3
-    smallWaves: 20
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0
-    bigWaves: 2
-    bigTimeBetweenWaves: 20
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
-  - difficulty: 1
-    MomHP: 3
-    glitchSpeed: 1.1
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.4
-    clearPercent: 0.3
-    smallWaves: 20
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0
-    bigWaves: 2
-    bigTimeBetweenWaves: 20
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
-  - difficulty: 1
-    MomHP: 3
-    glitchSpeed: 1.2
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 20
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0
-    bigWaves: 5
-    bigTimeBetweenWaves: 10
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 0.5
-  - difficulty: 1
-    MomHP: 10
-    glitchSpeed: 1.2
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.9
-    clearPercent: 0.3
+    clearPercent: 0.7
     smallWaves: 3
     smallTimeBetweenWaves: 20
-    smallUnitsPerWave: 1
-    smallMomChance: 1
+    smallUnitsPerWave: 5
+    smallMomChance: 0.5
     bigWaves: 0
     bigTimeBetweenWaves: 0
     bigWaveSurges: 0
@@ -189,15 +141,15 @@ MonoBehaviour:
     bigWaveUnitsPerSurge: 0
     bigWaveMomChance: 0
   - difficulty: 1
-    MomHP: 5
-    glitchSpeed: 1.5
+    MomHP: 3
+    glitchSpeed: 1.1
     levelDuration: 60
-    percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 20
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0.1
+    percentInitialSpacesFilled: 0.4
+    clearPercent: 0.7
+    smallWaves: 4
+    smallTimeBetweenWaves: 15
+    smallUnitsPerWave: 4
+    smallMomChance: 0.5
     bigWaves: 0
     bigTimeBetweenWaves: 0
     bigWaveSurges: 0
@@ -205,108 +157,28 @@ MonoBehaviour:
     bigWaveUnitsPerSurge: 0
     bigWaveMomChance: 0
   - difficulty: 1
-    MomHP: 5
-    glitchSpeed: 1.5
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.5
-    clearPercent: 0.3
-    smallWaves: 20
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0.1
-    bigWaves: 0
-    bigTimeBetweenWaves: 0
-    bigWaveSurges: 0
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 0
-    bigWaveMomChance: 0
-  - difficulty: 1
-    MomHP: 5
-    glitchSpeed: 1.5
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 12
-    smallTimeBetweenWaves: 5
-    smallUnitsPerWave: 2
-    smallMomChance: 0.2
-    bigWaves: 0
-    bigTimeBetweenWaves: 0
-    bigWaveSurges: 0
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 0
-    bigWaveMomChance: 0
-  - difficulty: 1
-    MomHP: 5
-    glitchSpeed: 1
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.5
-    clearPercent: 0.3
-    smallWaves: 12
-    smallTimeBetweenWaves: 5
-    smallUnitsPerWave: 2
-    smallMomChance: 0.2
-    bigWaves: 0
-    bigTimeBetweenWaves: 0
-    bigWaveSurges: 0
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 0
-    bigWaveMomChance: 0
-  - difficulty: 1
-    MomHP: 5
-    glitchSpeed: 1
-    levelDuration: 60
-    percentInitialSpacesFilled: 0.5
-    clearPercent: 0.3
-    smallWaves: 12
-    smallTimeBetweenWaves: 5
-    smallUnitsPerWave: 2
-    smallMomChance: 0
-    bigWaves: 3
-    bigTimeBetweenWaves: 20
-    bigWaveSurges: 2
-    bigWaveTimeBetweenSurges: 1
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
-  - difficulty: 2
-    MomHP: 10
+    MomHP: 3
     glitchSpeed: 1.2
-    levelDuration: 90
+    levelDuration: 60
     percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 30
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0.2
+    clearPercent: 0.7
+    smallWaves: 5
+    smallTimeBetweenWaves: 12
+    smallUnitsPerWave: 3
+    smallMomChance: 0.1
     bigWaves: 0
     bigTimeBetweenWaves: 0
     bigWaveSurges: 0
     bigWaveTimeBetweenSurges: 0
     bigWaveUnitsPerSurge: 0
     bigWaveMomChance: 0
-  - difficulty: 2
+  - difficulty: 1
     MomHP: 10
-    glitchSpeed: 1.3
-    levelDuration: 90
-    percentInitialSpacesFilled: 0.3
-    clearPercent: 0.3
-    smallWaves: 30
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 1
-    smallMomChance: 0.2
-    bigWaves: 0
-    bigTimeBetweenWaves: 0
-    bigWaveSurges: 0
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 0
-    bigWaveMomChance: 0
-  - difficulty: 2
-    MomHP: 10
-    glitchSpeed: 1.3
-    levelDuration: 90
-    percentInitialSpacesFilled: 0.5
-    clearPercent: 0.3
-    smallWaves: 30
+    glitchSpeed: 2
+    levelDuration: 60
+    percentInitialSpacesFilled: 0.9
+    clearPercent: 0.01
+    smallWaves: 20
     smallTimeBetweenWaves: 3
     smallUnitsPerWave: 1
     smallMomChance: 0.2
@@ -316,64 +188,112 @@ MonoBehaviour:
     bigWaveTimeBetweenSurges: 0
     bigWaveUnitsPerSurge: 5
     bigWaveMomChance: 0
-  - difficulty: 2
-    MomHP: 10
-    glitchSpeed: 1.4
-    levelDuration: 90
-    percentInitialSpacesFilled: 0.9
-    clearPercent: 0.1
-    smallWaves: 30
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 2
-    smallMomChance: 0
-    bigWaves: 2
-    bigTimeBetweenWaves: 30
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
-  - difficulty: 2
-    MomHP: 10
-    glitchSpeed: 1.5
-    levelDuration: 90
-    percentInitialSpacesFilled: 0.5
-    clearPercent: 0.3
-    smallWaves: 30
-    smallTimeBetweenWaves: 3
-    smallUnitsPerWave: 2
-    smallMomChance: 0
-    bigWaves: 2
-    bigTimeBetweenWaves: 30
-    bigWaveSurges: 1
-    bigWaveTimeBetweenSurges: 0
-    bigWaveUnitsPerSurge: 1
-    bigWaveMomChance: 1
-  - difficulty: 2
-    MomHP: 10
+  - difficulty: 1
+    MomHP: 5
     glitchSpeed: 1.2
-    levelDuration: 90
-    percentInitialSpacesFilled: 0.7
-    clearPercent: 0.3
-    smallWaves: 45
-    smallTimeBetweenWaves: 2
+    levelDuration: 60
+    percentInitialSpacesFilled: 0.3
+    clearPercent: 0.7
+    smallWaves: 6
+    smallTimeBetweenWaves: 10
     smallUnitsPerWave: 2
-    smallMomChance: 0.2
+    smallMomChance: 0.3
     bigWaves: 0
     bigTimeBetweenWaves: 0
     bigWaveSurges: 0
     bigWaveTimeBetweenSurges: 0
     bigWaveUnitsPerSurge: 0
     bigWaveMomChance: 0
-  - difficulty: 2
-    MomHP: 10
-    glitchSpeed: 1.2
-    levelDuration: 90
+  - difficulty: 1
+    MomHP: 5
+    glitchSpeed: 1.5
+    levelDuration: 60
     percentInitialSpacesFilled: 0.5
     clearPercent: 0.3
+    smallWaves: 20
+    smallTimeBetweenWaves: 3
+    smallUnitsPerWave: 1
+    smallMomChance: 0.1
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
+  - difficulty: 1
+    MomHP: 5
+    glitchSpeed: 1.3
+    levelDuration: 60
+    percentInitialSpacesFilled: 0
+    clearPercent: 0.9
+    smallWaves: 20
+    smallTimeBetweenWaves: 3
+    smallUnitsPerWave: 2
+    smallMomChance: 0.3
+    bigWaves: 5
+    bigTimeBetweenWaves: 10
+    bigWaveSurges: 3
+    bigWaveTimeBetweenSurges: 1
+    bigWaveUnitsPerSurge: 1
+    bigWaveMomChance: 0.2
+  - difficulty: 1
+    MomHP: 5
+    glitchSpeed: 1.3
+    levelDuration: 60
+    percentInitialSpacesFilled: 0.3
+    clearPercent: 0.7
+    smallWaves: 6
+    smallTimeBetweenWaves: 10
+    smallUnitsPerWave: 2
+    smallMomChance: 0.1
+    bigWaves: 2
+    bigTimeBetweenWaves: 20
+    bigWaveSurges: 1
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 3
+    bigWaveMomChance: 1
+  - difficulty: 1
+    MomHP: 5
+    glitchSpeed: 1
+    levelDuration: 60
+    percentInitialSpacesFilled: 0.5
+    clearPercent: 0.01
+    smallWaves: 60
+    smallTimeBetweenWaves: 1
+    smallUnitsPerWave: 1
+    smallMomChance: 0
+    bigWaves: 2
+    bigTimeBetweenWaves: 20
+    bigWaveSurges: 1
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 5
+    bigWaveMomChance: 1
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.5
+    clearPercent: 0.9
     smallWaves: 9
     smallTimeBetweenWaves: 10
-    smallUnitsPerWave: 3
-    smallMomChance: 0.1
+    smallUnitsPerWave: 1
+    smallMomChance: 0.2
+    bigWaves: 1
+    bigTimeBetweenWaves: 60
+    bigWaveSurges: 3
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 1
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.3
+    clearPercent: 0.7
+    smallWaves: 6
+    smallTimeBetweenWaves: 15
+    smallUnitsPerWave: 2
+    smallMomChance: 0
     bigWaves: 2
     bigTimeBetweenWaves: 30
     bigWaveSurges: 5
@@ -382,17 +302,97 @@ MonoBehaviour:
     bigWaveMomChance: 0.1
   - difficulty: 2
     MomHP: 10
-    glitchSpeed: 1.5
+    glitchSpeed: 1
     levelDuration: 90
-    percentInitialSpacesFilled: 0.7
-    clearPercent: 0.3
+    percentInitialSpacesFilled: 0.5
+    clearPercent: 0.7
     smallWaves: 9
     smallTimeBetweenWaves: 10
-    smallUnitsPerWave: 3
+    smallUnitsPerWave: 1
+    smallMomChance: 0.2
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
+  - difficulty: 2
+    MomHP: 5
+    glitchSpeed: 1.5
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.5
+    clearPercent: 0.01
+    smallWaves: 90
+    smallTimeBetweenWaves: 1
+    smallUnitsPerWave: 1
+    smallMomChance: 0
+    bigWaves: 2
+    bigTimeBetweenWaves: 30
+    bigWaveSurges: 1
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 5
+    bigWaveMomChance: 1
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.7
+    clearPercent: 0.7
+    smallWaves: 10
+    smallTimeBetweenWaves: 9
+    smallUnitsPerWave: 1
+    smallMomChance: 0
+    bigWaves: 2
+    bigTimeBetweenWaves: 30
+    bigWaveSurges: 1
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 1
+    bigWaveMomChance: 1
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1.2
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.7
+    clearPercent: 0.7
+    smallWaves: 10
+    smallTimeBetweenWaves: 9
+    smallUnitsPerWave: 1
+    smallMomChance: 0.2
+    bigWaves: 0
+    bigTimeBetweenWaves: 0
+    bigWaveSurges: 0
+    bigWaveTimeBetweenSurges: 0
+    bigWaveUnitsPerSurge: 0
+    bigWaveMomChance: 0
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1.3
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.7
+    clearPercent: 0.7
+    smallWaves: 10
+    smallTimeBetweenWaves: 9
+    smallUnitsPerWave: 1
     smallMomChance: 0.1
     bigWaves: 2
     bigTimeBetweenWaves: 30
-    bigWaveSurges: 10
-    bigWaveTimeBetweenSurges: 1
+    bigWaveSurges: 5
+    bigWaveTimeBetweenSurges: 2
+    bigWaveUnitsPerSurge: 1
+    bigWaveMomChance: 0.1
+  - difficulty: 2
+    MomHP: 10
+    glitchSpeed: 1.5
+    levelDuration: 90
+    percentInitialSpacesFilled: 0.7
+    clearPercent: 0.7
+    smallWaves: 10
+    smallTimeBetweenWaves: 9
+    smallUnitsPerWave: 1
+    smallMomChance: 0.1
+    bigWaves: 2
+    bigTimeBetweenWaves: 30
+    bigWaveSurges: 5
+    bigWaveTimeBetweenSurges: 2
     bigWaveUnitsPerSurge: 1
     bigWaveMomChance: 0.1

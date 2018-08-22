@@ -148,6 +148,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 3
     m_ConditionEvent: Health
     m_EventTreshold: 0.7
+  - m_ConditionMode: 2
+    m_ConditionEvent: Dying
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102233203815102244}
   m_Solo: 0
@@ -178,6 +181,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
     m_EventTreshold: 0.71
+  - m_ConditionMode: 2
+    m_ConditionEvent: Dying
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102380551404623428}
   m_Solo: 0
@@ -229,6 +235,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 4
     m_ConditionEvent: Health
     m_EventTreshold: 0.31
+  - m_ConditionMode: 2
+    m_ConditionEvent: Dying
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102199055117748188}
   m_Solo: 0

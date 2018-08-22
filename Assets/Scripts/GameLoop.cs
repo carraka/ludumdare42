@@ -105,6 +105,8 @@ public class GameLoop : MonoBehaviour {
         {
             cursor.GetComponent<Image>().enabled = false;
             cursor.GetComponentInChildren<Text>().enabled = false;
+            GameObject.Find("Postit").GetComponent<Image>().enabled = false;
+            GameObject.Find("memo").GetComponent<Image>().enabled = false;
         }
 
         AudioClip music = null;
@@ -269,7 +271,7 @@ public class GameLoop : MonoBehaviour {
 
         GameObject timeUp = GameObject.Find("timeUp");
 
-        for (float t = Mathf.PI / 2; t > -Mathf.PI / 2; t -= .01f)
+        for (float t = Mathf.PI / 2; t > -Mathf.PI / 2; t -= .02f)
         {
             Vector3 pos = timeUp.GetComponent<RectTransform>().localPosition;
             pos.x = 1200 * Mathf.Sin(t) * Mathf.Abs(Mathf.Sin(t));
@@ -400,15 +402,7 @@ public class GameLoop : MonoBehaviour {
                 }
                 else
                 {
-                    int rand;
-                    if (scannerSpawned)
-                        rand = Random.Range(1, 4);
-                    else
-                    {
-                        rand = Random.Range(0, 4);
-                        scannerSpawned = true;
-                    }
-                    SpawnGlitch(rand);
+                    SpawnGlitch(Random.Range(0, Mathf.Min(4, db.level)));
                 }
 
             }
@@ -442,16 +436,7 @@ public class GameLoop : MonoBehaviour {
                 }
                 else
                 {
-                    int rand;
-                    if (scannerSpawned)
-                        rand = Random.Range(1, 4);
-                    else
-                    {
-                        rand = Random.Range(0, 4);
-                        scannerSpawned = true;
-                    }
-
-                    SpawnGlitch(rand);
+                    SpawnGlitch(Random.Range(0, 4));
                 }
 
             }
@@ -493,16 +478,6 @@ public class GameLoop : MonoBehaviour {
                 newGlitch.GetComponent<Glitch>().Initiate(GlitchType.scanner, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
                 break;
             case 2:
-                if (Random.Range(0, 2) == 1)
-                    spawnLocation.x = document.monitorLeft - 25;
-                else spawnLocation.x = document.monitorRight + 25;
-
-                spawnLocation.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
-
-                newGlitch = Instantiate(looperPrefab, monitorTransform);
-                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.looper, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
-                break;
-            default:
                 if (startPos < document.monitorRight * 2.0f + 50)
                     spawnLocation = new Vector2(startPos - document.monitorRight - 25, document.monitorTop);
                 else
@@ -513,6 +488,16 @@ public class GameLoop : MonoBehaviour {
 
                 newGlitch = Instantiate(eraticPrefab, monitorTransform);
                 newGlitch.GetComponent<Glitch>().Initiate(GlitchType.eratic, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
+                break;
+            default:
+                if (Random.Range(0, 2) == 1)
+                    spawnLocation.x = document.monitorLeft - 25;
+                else spawnLocation.x = document.monitorRight + 25;
+
+                spawnLocation.y = Random.Range(document.monitorTop - 125f, document.monitorBottom + 125f);
+
+                newGlitch = Instantiate(looperPrefab, monitorTransform);
+                newGlitch.GetComponent<Glitch>().Initiate(GlitchType.looper, spawnLocation, db.levelData.data[db.level].glitchSpeed, GetComponentInChildren<Document>());
                 break;
         }
 
